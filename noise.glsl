@@ -179,10 +179,8 @@ vec4 grad4(float j, vec4 ip, float iw)
   const vec4 ones = vec4(1.,1.,1.,-1.);
   vec4 p,s;
 
-  //p = floor( fract (vec4(j) * ip) *pParam.w) * iw - ones;
   p.xyz = floor( fract (vec3(j) * ip.xyz) *pParam.w) * iw -1.0;
   p.w = 1.5 - dot(abs(p.xyz), ones.xyz);
-  //p.w = dot( -abs(p), ones);
   s = vec4(lessThan(p,vec4(0.)));
   p.xyz = p.xyz + (s.xyz*2.-1.) * s.www; 
 
