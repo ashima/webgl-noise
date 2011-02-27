@@ -198,9 +198,12 @@ float simplexNoise4(vec4 v)
   vec4 x0 = v -   i + dot(i, C.xxxx);
 
 // Other corners
+
+// Force existance of strict total ordering in sort.
+  vec4 q0 = floor(x0 * 1024.0) + vec4( 0., 1./4., 2./4. , 3./4.);
   vec4 q1;
-  q1.xy = max(x0.xy,x0.zw);   //  x:z  y:w
-  q1.zw = min(x0.xy,x0.zw);
+  q1.xy = max(q0.xy,q0.zw);   //  x:z  y:w
+  q1.zw = min(q0.xy,q0.zw);
 
   vec4 q2;
   q2.xz = max(q1.xz,q1.yw);   //  x:y  z:w
@@ -211,9 +214,9 @@ float simplexNoise4(vec4 v)
   q3.z = min(q2.y,q2.z);
   q3.xw = q2.xw;
 
-  vec4 i1 =      vec4(equal(q3.xxxx, x0));
-  vec4 i2 = i1 + vec4(equal(q3.yyyy, x0));
-  vec4 i3 = i2 + vec4(equal(q3.zzzz, x0));
+  vec4 i1 = vec4(lessThanEqual(q3.xxxx, q0));
+  vec4 i2 = vec4(lessThanEqual(q3.yyyy, q0));
+  vec4 i3 = vec4(lessThanEqual(q3.zzzz, q0));
 
    //  x0 = x0 - 0. + 0. * C 
   vec4 x1 = x0 - i1 + 1. * C.xxxx;
