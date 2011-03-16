@@ -186,12 +186,12 @@ float simplexNoise3(vec3 v)
                                 dot(p2,x2), dot(p3,x3) ) );
   }
 
-vec4 grad4(float j, vec4 ip, float iw)
+vec4 grad4(float j, vec4 ip)
   {
   const vec4 ones = vec4(1.,1.,1.,-1.);
   vec4 p,s;
 
-  p.xyz = floor( fract (vec3(j) * ip.xyz) *pParam.w) * iw -1.0;
+  p.xyz = floor( fract (vec3(j) * ip.xyz) *pParam.w) * ip.z -1.0;
   p.w = 1.5 - dot(abs(p.xyz), ones.xyz);
   s = vec4(lessThan(p,vec4(0.)));
   p.xyz = p.xyz + (s.xyz*2.-1.) * s.www; 
@@ -246,16 +246,16 @@ float simplexNoise4(vec4 v)
            + i.x + vec4(i1.x, i2.x, i3.x, 1. ), pParam.xyz);
 // Gradients
 // ( N*N*N points uniformly over a cube, mapped onto a 4-octohedron.)
-  vec4 ip = 1.0 / vec4(pParam.w*pParam.w*pParam.w, 
-                       pParam.w*pParam.w, 
-                       pParam.w,0.);
-  float iw = 2.0 * ip.z ;
+  vec4 ip = pParam ;
+  ip.xy *= pParam.w ;
+  ip.x  *= pParam.w ;
+  ip = vec4(1.,1.,1.,2.) / ip ;
 
-  vec4 p0 = grad4(j0,   ip, iw);
-  vec4 p1 = grad4(j1.x, ip, iw);
-  vec4 p2 = grad4(j1.y, ip, iw);
-  vec4 p3 = grad4(j1.z, ip, iw);
-  vec4 p4 = grad4(j1.w, ip, iw);
+  vec4 p0 = grad4(j0,   ip);
+  vec4 p1 = grad4(j1.x, ip);
+  vec4 p2 = grad4(j1.y, ip);
+  vec4 p3 = grad4(j1.z, ip);
+  vec4 p4 = grad4(j1.w, ip);
 
 #ifdef NORMALISE_GRADIENTS
   p0 *= taylorInvSqrt(dot(p0,p0));
