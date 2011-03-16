@@ -8,14 +8,26 @@
 //              Distributed under the Artistic License 2.0; See LICENCE file.
 //
 
-#undef  NORMALIZE_GRADIENTS
+#define  NORMALIZE_GRADIENTS
 #undef  USE_CIRCLE
 #define COLLAPSE_SORTNET
 
-vec2 permute(vec2 x,vec3 p) { return floor(mod( (p.y*x + p.z) * x , p.x )); } 
-vec3 permute(vec3 x,vec3 p) { return floor(mod( (p.y*x + p.z) * x , p.x )); } 
-vec4 permute(vec4 x,vec3 p) { return floor(mod( (p.y*x + p.z) * x , p.x )); } 
-float permute(float x,vec3 p) { return floor(mod( (p.y*x + p.z) * x , p.x )); } 
+float permute(float x0,vec3 p) { 
+  float x1 = mod(x0 * p.y, p.x);
+  return floor(  mod( (x1 + p.z) *x0, p.x ));
+  }
+vec2 permute(vec2 x0,vec3 p) { 
+  vec2 x1 = mod(x0 * p.y, p.x);
+  return floor(  mod( (x1 + p.z) *x0, p.x ));
+  }
+vec3 permute(vec3 x0,vec3 p) { 
+  vec3 x1 = mod(x0 * p.y, p.x);
+  return floor(  mod( (x1 + p.z) *x0, p.x ));
+  }
+vec4 permute(vec4 x0,vec3 p) { 
+  vec4 x1 = mod(x0 * p.y, p.x);
+  return floor(  mod( (x1 + p.z) *x0, p.x ));
+  }
 
 uniform vec4 pParam; 
 // Example
