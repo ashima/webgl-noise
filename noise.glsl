@@ -11,6 +11,7 @@
 #define NORMALIZE_GRADIENTS
 #undef USE_CIRCLE
 #define COLLAPSE_SORTNET
+#define MOREDOTS
 
 float permute(float x0,vec3 p) { 
   float x1 = mod(x0 * p.y, p.x);
@@ -65,39 +66,43 @@ float simplexNoise2(vec2 v)
              i.y + vec3(0., i1.y, 1. ), pParam.xyz)
            + i.x + vec3(0., i1.x, 1. ), pParam.xyz);
 
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(xC.xy,xC.xy), dot(xC.zw,xC.zw)), 0.);
+  m = m*m ;
+  m = m*m ;
 #ifndef USE_CIRCLE
 // ( N points uniformly over a line, mapped onto a diamond.)
   vec3 x = 2.0 * fract(p / pParam.w) - 1. ;
   vec3 h = 0.5 - abs(x) ;
 
-  //vec3 sx = vec3(lessThan(x,D.xxx)) *2. -1.;
-  //vec3 sh = vec3(lessThan(h,D.xxx));
   vec3 sx = 2.*floor(x) + 1.;
   vec3 sh = floor(h);
 
   vec3 a0 = x + sx*sh;
-  vec2 p0 = vec2(a0.x,h.x);
-  vec2 p1 = vec2(a0.y,h.y);
-  vec2 p2 = vec2(a0.z,h.z);
 
-#ifdef NORMALISE_GRADIENTS
-  p0 *= taylorInvSqrt(dot(p0,p0));
-  p1 *= taylorInvSqrt(dot(p1,p1));
-  p2 *= taylorInvSqrt(dot(p2,p2));
-#endif
+# ifdef NORMALISE_GRADIENTS
+  m *= taylorInvSqrt( a0*a0 + h*h );
+# endif
+  //vec2 p0 = vec2(a0.x,h.x);
+  //vec2 p1 = vec2(a0.y,h.y);
+  //vec2 p2 = vec2(a0.z,h.z);
+  //vec3 g = vec3( dot(p0, x0), dot(p1, xC.xy), dot(p2, xC.zw) );
 
-  vec3 g = 2.0 * vec3( dot(p0, x0), dot(p1, xC.xy), dot(p2, xC.zw) );
+  vec3 g;
+// a0 *= m;
+// h  *= m;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * xC.xz + h.yz * xC.yw;
+
+  return 1.66666* 70. *2. * dot(m, g);
 #else 
 // N points around a unit circle.
   vec3 phi = D.z * mod(p,pParam.w) /pParam.w ;
   vec4 a0 = sin(phi.xxyy+D.xyxy);
   vec2 a1 = sin(phi.zz  +D.xy);
-  vec3 g = vec3( dot(a0.xy, x0), dot(a0.zw, xC.xy), dot(a1.xy, xC.zw) );
-#endif
 // mix
-  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(xC.xy,xC.xy), dot(xC.zw,xC.zw)), 0.);
-  m = m*m ;
-  return 1.66666* 70.*dot(m*m, g);
+  vec3 g = vec3( dot(a0.xy, x0), dot(a0.zw, xC.xy), dot(a1.xy, xC.zw) );
+  return 1.66666* 70.*dot(m, g);
+#endif
   }
 
 float simplexNoise3(vec3 v)
