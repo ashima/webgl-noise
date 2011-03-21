@@ -48,11 +48,16 @@ float simplexNoise2(vec2 v)
   vec2 x0 = v -   i + dot(i, C.xx);
 
 // Other corners
-  vec2 i1  =  (x0.x > x0.y) ? vec2(1.,0.) : vec2(0.,1.) ;
+  vec2 i1;
+  i1.x = float( (x0.x>x0.y) );
+  i1.y = 1. - i1.x;
 
-   //  x0 = x0 - 0. + 0. * C
-  vec2 x1 = x0 - i1 + 1. * C.xx ;
-  vec2 x2 = x0 - 1. + 2. * C.xx ;
+  // x0 = x0 - 0. + 0. * C.xx ;
+  // x1 = x0 - i1 + 1. * C.xx ;
+  // x2 = x0 - 1. + 2. * C.xx ;
+
+  vec4 xC = x0.xyxy + vec4( C.xx, -1. + 2.* C.xx);
+  xC.xy -= i1;
 
 // Permutations
   i = mod(i, pParam.x);
@@ -62,11 +67,13 @@ float simplexNoise2(vec2 v)
 
 #ifndef USE_CIRCLE
 // ( N points uniformly over a line, mapped onto a diamond.)
-  vec3 x = fract(p / pParam.w) ;
+  vec3 x = 2.0 * fract(p / pParam.w) - 1. ;
   vec3 h = 0.5 - abs(x) ;
 
-  vec3 sx = vec3(lessThan(x,D.xxx)) *2. -1.;
-  vec3 sh = vec3(lessThan(h,D.xxx));
+  //vec3 sx = vec3(lessThan(x,D.xxx)) *2. -1.;
+  //vec3 sh = vec3(lessThan(h,D.xxx));
+  vec3 sx = 2.*floor(x) + 1.;
+  vec3 sh = floor(h);
 
   vec3 a0 = x + sx*sh;
   vec2 p0 = vec2(a0.x,h.x);
@@ -79,16 +86,16 @@ float simplexNoise2(vec2 v)
   p2 *= taylorInvSqrt(dot(p2,p2));
 #endif
 
-  vec3 g = 2.0 * vec3( dot(p0, x0), dot(p1, x1), dot(p2, x2) );
+  vec3 g = 2.0 * vec3( dot(p0, x0), dot(p1, xC.xy), dot(p2, xC.zw) );
 #else 
 // N points around a unit circle.
   vec3 phi = D.z * mod(p,pParam.w) /pParam.w ;
   vec4 a0 = sin(phi.xxyy+D.xyxy);
   vec2 a1 = sin(phi.zz  +D.xy);
-  vec3 g = vec3( dot(a0.xy, x0), dot(a0.zw, x1), dot(a1.xy, x2) );
+  vec3 g = vec3( dot(a0.xy, x0), dot(a0.zw, xC.xy), dot(a1.xy, xC.zw) );
 #endif
 // mix
-  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x1,x1), dot(x2,x2)), 0.);
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(xC.xy,xC.xy), dot(xC.zw,xC.zw)), 0.);
   m = m*m ;
   return 1.66666* 70.*dot(m*m, g);
   }
@@ -105,9 +112,9 @@ float simplexNoise3(vec3 v)
 // Other corners
 #ifdef COLLAPSE_SORTNET
   vec3 g = vec3( greaterThan(   x0.xyz, x0.yzx) );
-  vec3 l = vec3( lessThanEqual( x0.xyz, x0.yzx) );
-
-  vec3 i1 = g.xyz  * l.zxy;
+//  vec3 l = vec3( lessThanEqual( x0.xyz, x0.yzx) );
+  vec3 l = 1. - g;
+  vec3 i1 = g.xyz * l.zxy;
   vec3 i2 = max( g.xyz, l.zxy);
 #else
 // Keeping this clean - let the compiler optimize.
@@ -161,9 +168,11 @@ float simplexNoise3(vec3 v)
   vec4 b0 = vec4( x.xy, y.xy );
   vec4 b1 = vec4( x.zw, y.zw );
 
-  vec4 s0 = vec4(lessThan(b0,D.xxxx)) *2. -1.;
-  vec4 s1 = vec4(lessThan(b1,D.xxxx)) *2. -1.;
-  vec4 sh = vec4(lessThan(h, D.xxxx));
+  //vec4 s0 = vec4(lessThan(b0,D.xxxx)) *2. -1.;
+  //vec4 s1 = vec4(lessThan(b1,D.xxxx)) *2. -1.;
+  vec4 s0 = floor(b0) *2. +1.;
+  vec4 s1 = floor(b1) *2. +1.;
+  vec4 sh = -vec4(lessThan(h, D.xxxx));
 
   vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
   vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
