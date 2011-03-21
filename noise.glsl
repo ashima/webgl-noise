@@ -8,8 +8,8 @@
 //              Distributed under the Artistic License 2.0; See LICENCE file.
 //
 
-#define  NORMALIZE_GRADIENTS
-#undef  USE_CIRCLE
+#define NORMALIZE_GRADIENTS
+#undef USE_CIRCLE
 #define COLLAPSE_SORTNET
 
 float permute(float x0,vec3 p) { 
@@ -111,10 +111,12 @@ float simplexNoise3(vec3 v)
   vec3 i2 = max( g.xyz, l.zxy);
 #else
 // Keeping this clean - let the compiler optimize.
+// Force existance of strict total ordering in sort.
+  vec3 q0 = floor(x0 * 1024.0) + vec3( 0., 1./4., 2./4.);
   vec3 q1;
-  q1.x = max(x0.x, x0.y);
-  q1.y = min(x0.x, x0.y);
-  q1.z = x0.z;
+  q1.x = max(q0.x, q0.y);
+  q1.y = min(q0.x, q0.y);
+  q1.z = q0.z;
 
   vec3 q2;
   q2.x = max(q1.x,q1.z);
@@ -126,8 +128,8 @@ float simplexNoise3(vec3 v)
   q3.z = min(q2.y, q2.z);
   q3.x = q2.x;
 
-  vec3 i1 = vec3(equal(q3.xxx, x0));
-  vec3 i2 = i1 + vec3(equal(q3.yyy, x0));
+  vec3 i1 = vec3(lessThanEqual(q3.xxx, q0));
+  vec3 i2 = vec3(lessThanEqual(q3.yyy, q0));
 #endif
 
    //  x0 = x0 - 0. + 0. * C 
