@@ -262,7 +262,7 @@ float simplexNoise4(vec4 v)
            + i.x + vec4(i1.x, i2.x, i3.x, 1. ), pParam.xyz);
 // Gradients
 // ( N*N*N points uniformly over a cube, mapped onto a 4-octohedron.)
-  vec4 ip = pParam ;
+  vec4 ip = vec4(pParam.w) ;
   ip.xy *= pParam.w ;
   ip.x  *= pParam.w ;
   ip = vec4(1.,1.,1.,2.) / ip ;
