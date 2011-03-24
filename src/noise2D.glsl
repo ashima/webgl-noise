@@ -41,12 +41,11 @@ float simplexNoise(vec2 v)
 #ifndef USE_CIRCLE
 // ( N points uniformly over a line, mapped onto a diamond.)
   vec3 x = 2.0 * fract(p / pParam.w) - 1. ;
-  vec3 h = 0.5 - abs(x) ;
+  vec3 h = abs(x) - 0.5 ;
 
-  vec3 sx = 2.*floor(x) + 1.;
-  vec3 sh = floor(h);
+  vec3 ox = floor(x+0.5);
 
-  vec3 a0 = x + sx*sh;
+  vec3 a0 = x - ox;
 
 # ifdef NORMALISE_GRADIENTS
   m *= taylorInvSqrt( a0*a0 + h*h );
@@ -62,7 +61,7 @@ float simplexNoise(vec2 v)
   g.x  = a0.x  * x0.x  + h.x  * x0.y;
   g.yz = a0.yz * xC.xz + h.yz * xC.yw;
 
-  return 1.66666* 70. *2. * dot(m, g);
+  return 200.0 * dot(m, g);
 #else 
 // N points around a unit circle.
   vec3 phi = D.z * mod(p,pParam.w) /pParam.w ;
@@ -70,7 +69,6 @@ float simplexNoise(vec2 v)
   vec2 a1 = sin(phi.zz  +D.xy);
 // mix
   vec3 g = vec3( dot(a0.xy, x0), dot(a0.zw, xC.xy), dot(a1.xy, xC.zw) );
-  return 1.66666* 70.*dot(m, g);
+  return 200.0 * dot(m, g);
 #endif
   }
-
