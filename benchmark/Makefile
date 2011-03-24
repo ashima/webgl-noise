@@ -1,8 +1,8 @@
-
-.PHONY: default clean Linux MacOSX Win32
+.PHONY: default clean Linux MacOSX Win32 clean-Win32
 
 default:
-	@echo Usage: ; echo 'make [Linux | MacOSX | Win32 ]'
+	@echo "Usage:"
+	@echo "make [ Linux | MacOSX | Win32 ]"
 
 clean:
 	cd Linux ; make clean
@@ -18,6 +18,8 @@ MacOSX:
 	cd $@ ; make ; make run
 
 Win32:
-	cd common ; make
-	cd $@ ; make ; make run
+	cd common && mingw32-make
+	cd $@ && mingw32-make && mingw32-make run
 
+clean-Win32:
+	cd Win32 && mingw32-make clean
