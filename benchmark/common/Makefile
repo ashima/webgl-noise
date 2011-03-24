@@ -7,7 +7,7 @@ SHADERS=GLSL-ashimanoise2D.frag GLSL-ashimanoise3D.frag \
 all: $(SHADERS)
 
 clean:
-	 rm $(SHADERS)
+	 - rm $(SHADERS)
 
 GLSL-ashimanoise2D.frag: $(SRCDIR)/noise2D.glsl $(COMMON)
 	cpp -P -I$(SRCDIR) -DSHADER=\"noise2D.glsl\" \

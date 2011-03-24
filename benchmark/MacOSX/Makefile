@@ -1,24 +1,32 @@
-SHADERS=GLSL-ashimanoise.vert GLSL-ashimanoise2D.frag \
-	GLSL-ashimanoise3D.frag GLSL-ashimanoise4D.frag
+EXECNAME=noisebench
+OUTPUTFILE=ashimanoise.log
 COMDIR=../common
-VPATH=$(COMDIR)
 
 OBJS=noisebench.o
+SHADERS=GLSL-ashimanoise.vert GLSL-ashimanoise2D.frag \
+	GLSL-ashimanoise3D.frag GLSL-ashimanoise4D.frag
 
+VPATH=$(COMDIR)
 CFLAGS=-I. -I/usr/X11/include
 LDFLAGS=-framework Cocoa -framework OpenGL -lglfw
 
-all: noisebench.app links_done
+.PHONY: all clean run
+
+all: $(EXECNAME).app links_done
 
 links_done: $(SHADERS)
 	ln -s $? . ; touch links_done
 
-noisebench.app: noisebench
+$(EXECNAME).app: $(EXECNAME)
 	./bundle.sh $@ $^ ; chmod a-x $^
 	
-noisebench: $(OBJS)
+$(EXECNAME): $(OBJS)
 
 clean:
-	rm -r noisebench.app; rm noisebench links_done $(OBJS) $(SHADERS)
+	- rm -r $(EXECNAME).app
+	- rm $(EXECNAME) links_done $(OBJS) $(SHADERS) $(OUTPUTFILE)
 
-
+run:
+	open -W -a $(EXECNAME)
+	cat $(OUTPUTFILE)
+	

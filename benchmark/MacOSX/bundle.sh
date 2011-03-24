@@ -9,6 +9,7 @@ fi
 
 bundle_name="$1"
 exec_file="$2"
+exec_name=`basename $bundle_name .app`
 
 if [ ! -f $exec_file ]; then
   echo "Can't find $exec_file"
@@ -37,20 +38,16 @@ if [ ! -f "${bundle_name}/Contents/Info.plist" ]; then
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-        <key>CFBundleDevelopmentRegion</key>
-        <string>English</string>
-        <key>CFBundleExecutable</key>
-        <string>${bundle_name}</string>
-        <key>CFBundleInfoDictionaryVersion</key>
-        <string>6.0</string>
-        <key>CFBundlePackageType</key>
-        <string>APPL</string>
-        <key>CFBundleSignature</key>
-        <string>????</string>
-        <key>CFBundleVersion</key>
-        <string>0.1</string>
+  <key>CFBundleName</key>        <string>${exec_name}</string>
+  <key>CFBundleExecutable</key>  <string>${exec_name}</string>
+  <key>CFBundleIdentifier</key>  <string>com.ashimaarts.${exec_name}</string>
+  <key>CFBundleVersion</key>     <string>0.1</string>
+
+  <key>CFBundlePackageType</key>           <string>APPL</string>
+  <key>CFBundleDevelopmentRegion</key>     <string>English</string>
+  <key>CFBundleSignature</key>             <string>????</string>
+  <key>CFBundleInfoDictionaryVersion</key> <string>6.0</string>
 </dict>
 </plist>
 EOF
 fi
-
