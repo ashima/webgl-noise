@@ -31,6 +31,29 @@ float simplexNoise(vec4 v)
 
 // Other corners
 
+#if (0)
+  // Rank sorting by Bill Licea-Kane, AMD (formerly ATI).
+  // BUG: This works fine om Nvidia hardware, but ironically,
+  // on ATI-AMD hardware the sorting is messed up. Why?
+  vec4 i0;
+
+  vec3 isX = step( x0.yzw, x0.xxx );
+  i0.x = dot( isX, vec3( 1.0 ) );
+  i0.yzw = 1.0 - isX;
+
+  vec2 isY = step( x0.zw, x0.yy );
+  i0.y += dot( isY, vec2( 1.0 ) );
+  i0.zw += 1.0 - isY;
+
+  float isZ = step( x0.w, x0.z ); // Could be folded into the vec2 step() above
+  i0.z += isZ;
+  i0.w += 1.0 - isZ;
+
+  // i0 now contains the unique values 0,1,2,3 in each channel
+  vec4 i1 = clamp(   i0, 0.0, 1.0 );
+  vec4 i2 = clamp( --i0, 0.0, 1.0 );
+  vec4 i3 = clamp( --i0, 0.0, 1.0 );
+#else
 // Force existance of strict total ordering in sort.
   vec4 q0 = floor(x0 * 1024.0) + vec4( 0.0, 1.0/4.0, 2.0/4.0 , 3.0/4.0);
   vec4 q1;
@@ -49,6 +72,7 @@ float simplexNoise(vec4 v)
   vec4 i1 = vec4(lessThanEqual(q3.xxxx, q0));
   vec4 i2 = vec4(lessThanEqual(q3.yyyy, q0));
   vec4 i3 = vec4(lessThanEqual(q3.zzzz, q0));
+#endif
 
   //  x0 = x0 - 0.0 + 0.0 * C 
   vec4 x1 = x0 - i1 + 1.0 * C.xxxx;
@@ -92,7 +116,7 @@ float simplexNoise(vec4 v)
   vec2 m1 = max(0.6 - vec2(dot(x3,x3), dot(x4,x4)            ), 0.0);
   m0 = m0 * m0;
   m1 = m1 * m1;
-  return 44.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))
+  return 70.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))
                + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 
   }

@@ -61,7 +61,7 @@ float simplexNoise(vec2 v)
   g.x  = a0.x  * x0.x  + h.x  * x0.y;
   g.yz = a0.yz * xC.xz + h.yz * xC.yw;
 
-  return 200.0 * dot(m, g);
+  return 160.0 * dot(m, g);
 #else 
 // N points around a unit circle.
   vec3 phi = D.z * mod(p,pParam.w) /pParam.w ;
@@ -69,6 +69,6 @@ float simplexNoise(vec2 v)
   vec2 a1 = sin(phi.zz  +D.xy);
 // mix
   vec3 g = vec3( dot(a0.xy, x0), dot(a0.zw, xC.xy), dot(a1.xy, xC.zw) );
-  return 200.0 * dot(m, g);
+  return 160.0 * dot(m, g);
 #endif
   }
