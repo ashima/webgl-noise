@@ -359,7 +359,7 @@ int main(int argc, char *argv[]) {
     glfwInit();
 
     // Open the OpenGL window
-    if( !glfwOpenWindow(1024, 1024, 8,8,8,8, 32,0, GLFW_WINDOW) )
+    if( !glfwOpenWindow(4096, 4096, 8,8,8,8, 32,0, GLFW_FULLSCREEN) )
     {
         glfwTerminate(); // glfwOpenWindow failed, quit the program.
         return 1;

@@ -3,7 +3,7 @@
 //               noise functions.
 //      Author : Ian McEwan, Ashima Arts.
 //  Maintainer : ijm
-//     Lastmod : 20110223
+//     Lastmod : 20110325
 //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
 //              Distributed under the Artistic License 2.0; See LICENCE file.
 //
@@ -32,7 +32,7 @@ float simplexNoise(vec4 v)
 // Other corners
 
 #ifdef COLLAPSE_SORTNET
-  // Rank sorting by Bill Licea-Kane, AMD (formerly ATI).
+  // Rank sorting contributed by Bill Licea-Kane, AMD (formerly ATI)
   vec4 i0;
 
   vec3 isX = step( x0.yzw, x0.xxx );
@@ -117,5 +117,3 @@ float simplexNoise(vec4 v)
                + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 
   }
-
-
