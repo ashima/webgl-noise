@@ -16,7 +16,7 @@
  */
 
 // Identify the exact version of noise being benchmarked
-#define NOISEVERSION "2011-03-21"
+#define NOISEVERSION "2011-03-25"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +25,7 @@
 
 #ifdef __WIN32__
 // The system level include file for GL extensions might not be up to date.
-#include "glext.h"
+#include "GL/glext.h"
 #else
 #include <GL/glext.h>
 #endif

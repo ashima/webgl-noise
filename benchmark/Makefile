@@ -1,13 +1,14 @@
+WINMAKE = mingw32-make
+
 .PHONY: default clean Linux MacOSX Win32 clean-Win32
 
 default:
 	@echo "Usage:"
-	@echo "make [ Linux | MacOSX | Win32 ]"
+	@echo "make [ Linux | MacOSX | Win32 | clean | clean-Win32]"
 
 clean:
 	cd Linux ; make clean
 	cd MacOSX ; make clean
-	cd Win32 ; make clean
 
 Linux:
 	cd common ; make
@@ -18,8 +19,8 @@ MacOSX:
 	cd $@ ; make ; make run
 
 Win32:
-	cd common && mingw32-make
-	cd $@ && mingw32-make && mingw32-make run
+	cd common && $(WINMAKE)
+	cd $@ && $(WINMAKE) && $(WINMAKE)
 
 clean-Win32:
-	cd Win32 && mingw32-make clean
+	cd Win32 && $(WINMAKE) clean
