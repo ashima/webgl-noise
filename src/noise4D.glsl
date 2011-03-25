@@ -32,14 +32,21 @@ float simplexNoise(vec4 v)
 // Other corners
 
 #ifdef COLLAPSE_SORTNET
+#ifdef NOSTEP
+#define Astep3(X,Y) (vec3(greaterThanEqual( (Y), vec3(X)) ));
+#define Astep4(X,Y) (vec4(greaterThanEqual( (Y), vec4(X)) ));
+#else
+#define Astep3(X,Y) (step((X),(Y)))
+#define Astep4(X,Y) (step((X),(Y)))
+#endif
   // Rank sorting contributed by Bill Licea-Kane, AMD (formerly ATI)
   vec4 i0;
 
-  vec3 isX = step( x0.yzw, x0.xxx );
+  vec3 isX = Astep3( x0.yzw, x0.xxx );
   i0.x = dot( isX, vec3( 1.0 ) );
   i0.yzw = 1.0 - isX;
 
-  vec3 isYZ = step( x0.zww, x0.yyz );
+  vec3 isYZ = Astep3( x0.zww, x0.yyz );
   i0.y += dot( isYZ.xy, vec2( 1.0 ) );
   i0.zw += 1.0 - isYZ.xy;
 
@@ -47,9 +54,15 @@ float simplexNoise(vec4 v)
   i0.w += 1.0 - isYZ.z;
 
   // i0 now contains the unique values 0,1,2,3 in each channel
+#ifdef NOCLAMP
+  vec4 i3 = Astep4( 0.5,i0 );
+  vec4 i2 = Astep4( 1.5,i0 );
+  vec4 i1 = Astep4( 2.5,i0 );
+#else
   vec4 i3 = clamp( i0, 0.0, 1.0 );
   vec4 i2 = clamp( i0-1.0, 0.0, 1.0 );
   vec4 i1 = clamp( i0-2.0, 0.0, 1.0 );
+#endif
 #else
 // Force existance of strict total ordering in sort.
   vec4 q0 = floor(x0 * 1024.0) + vec4( 0.0, 1.0/4.0, 2.0/4.0 , 3.0/4.0);
