@@ -41,18 +41,17 @@ float simplexNoise(vec4 v)
   i0.x = dot( isX, vec3( 1.0 ) );
   i0.yzw = 1.0 - isX;
 
-  vec2 isY = step( x0.zw, x0.yy );
-  i0.y += dot( isY, vec2( 1.0 ) );
-  i0.zw += 1.0 - isY;
+  vec3 isYZ = step( x0.zww, x0.yyz );
+  i0.y += dot( isYZ.xy, vec2( 1.0 ) );
+  i0.zw += 1.0 - isYZ.xy;
 
-  float isZ = step( x0.w, x0.z ); // Could be folded into the vec2 step() above
-  i0.z += isZ;
-  i0.w += 1.0 - isZ;
+  i0.z += isYZ.z;
+  i0.w += 1.0 - isYZ.z;
 
   // i0 now contains the unique values 0,1,2,3 in each channel
-  vec4 i1 = clamp(   i0, 0.0, 1.0 );
-  vec4 i2 = clamp( --i0, 0.0, 1.0 );
-  vec4 i3 = clamp( --i0, 0.0, 1.0 );
+  vec4 i3 = clamp( i0, 0.0, 1.0 );
+  vec4 i2 = clamp( i0-1.0, 0.0, 1.0 );
+  vec4 i1 = clamp( i0-2.0, 0.0, 1.0 );
 #else
 // Force existance of strict total ordering in sort.
   vec4 q0 = floor(x0 * 1024.0) + vec4( 0.0, 1.0/4.0, 2.0/4.0 , 3.0/4.0);

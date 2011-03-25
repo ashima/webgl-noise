@@ -7,6 +7,7 @@ default:
 	@echo "make [ Linux | MacOSX | Win32 | clean | clean-Win32]"
 
 clean:
+	cd common ; make clean
 	cd Linux ; make clean
 	cd MacOSX ; make clean
 
@@ -23,4 +24,5 @@ Win32:
 	cd $@ && $(WINMAKE) && $(WINMAKE)
 
 clean-Win32:
+	cd common && $(WINMAKE) clean
 	cd Win32 && $(WINMAKE) clean
