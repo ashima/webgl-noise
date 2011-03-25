@@ -21,7 +21,7 @@ MacOSX:
 
 Win32:
 	cd common && $(WINMAKE)
-	cd $@ && $(WINMAKE) && $(WINMAKE)
+	cd $@ && $(WINMAKE) && $(WINMAKE) run
 
 clean-Win32:
 	cd common && $(WINMAKE) clean

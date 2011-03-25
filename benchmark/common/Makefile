@@ -1,4 +1,4 @@
-OPTIONS=-DNORMALISE_GRADIENTS
+OPTIONS=-DNORMALISE_GRADIENTS -DCOLLAPSE_SORTNET
 SRCDIR=../../src
 COMMON=commonShader.frag $(SRCDIR)/noiseStdLib.glsl
 SHADERS=GLSL-ashimanoise2D.frag GLSL-ashimanoise3D.frag \

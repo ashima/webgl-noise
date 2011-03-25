@@ -31,10 +31,8 @@ float simplexNoise(vec4 v)
 
 // Other corners
 
-#if (0)
+#ifdef COLLAPSE_SORTNET
   // Rank sorting by Bill Licea-Kane, AMD (formerly ATI).
-  // BUG: This works fine om Nvidia hardware, but ironically,
-  // on ATI-AMD hardware the sorting is messed up. Why?
   vec4 i0;
 
   vec3 isX = step( x0.yzw, x0.xxx );
