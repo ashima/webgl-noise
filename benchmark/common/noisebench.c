@@ -375,7 +375,6 @@ int main(int argc, char *argv[]) {
     fprintf(logfile, "GL vendor:     %s\n", glGetString(GL_VENDOR));
     fprintf(logfile, "GL renderer:   %s\n", glGetString(GL_RENDERER));
     fprintf(logfile, "GL version:    %s\n", glGetString(GL_VERSION));
-    fprintf(logfile, "Noise version: %s\n", NOISEVERSION);
 
     // Create the shader object from two external GLSL source files
     createShader(&programObject, VERTEXSHADERFILE2D, FRAGMENTSHADERFILE2D);
