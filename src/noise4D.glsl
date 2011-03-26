@@ -41,7 +41,15 @@ float simplexNoise(vec4 v)
 #endif
   // Rank sorting contributed by Bill Licea-Kane, AMD (formerly ATI)
   vec4 i0;
-
+#if TRANSPOSE_BILL
+  vec3 isX  = Astep3( x0.yzw, x0.xxx );
+  vec3 isYZ = Astep3( x0.zww, x0.yyz );
+  i0.x = dot(isX, vec3(1.0));
+  i0.yzw = vec3(1.0,2.0,3.0)
+         + isYZ.xxy*vec3(1.0,-1.0,-1.0)
+         + isYZ.yzz*vec3(1.0, 1.0,-1.0)
+         - isX.xyz ;
+#else
   vec3 isX = Astep3( x0.yzw, x0.xxx );
   i0.x = dot( isX, vec3( 1.0 ) );
   i0.yzw = 1.0 - isX;
@@ -52,6 +60,7 @@ float simplexNoise(vec4 v)
 
   i0.z += isYZ.z;
   i0.w += 1.0 - isYZ.z;
+#endif
 
   // i0 now contains the unique values 0,1,2,3 in each channel
 #ifdef NOCLAMP
