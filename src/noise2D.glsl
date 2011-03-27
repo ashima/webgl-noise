@@ -70,6 +70,6 @@ float simplexNoise(vec2 v)
   vec3 g = vec3( dot(a0.xy, x0), dot(a0.zw, xC.xy), dot(a1.xy, xC.zw) );
 #endif
 
-  return 160.0 * dot(m, g);
+  return 130.0 * dot(m, g);
 
   }
