@@ -10,10 +10,10 @@
 
 vec4 grad4(float j, vec4 ip)
   {
-  const vec4 ones = vec4(1.0,1.0,1.0,-1.0);
+  const vec4 ones = vec4(1.0, 1.0, 1.0, -1.0);
   vec4 p,s;
 
-  p.xyz = floor( fract (vec3(j) * ip.xyz) *pParam.w) * ip.z -1.0;
+  p.xyz = floor( fract (vec3(j) * ip.xyz) *pParam.w) * ip.z - 1.0;
   p.w = 1.5 - dot(abs(p.xyz), ones.xyz);
   s = vec4(lessThan(p, vec4(0.0)));
   p.xyz = p.xyz + (s.xyz*2.0 - 1.0) * s.www; 
@@ -32,15 +32,17 @@ float simplexNoise(vec4 v)
 // Other corners
 
 #ifdef COLLAPSE_SORTNET
-  // Rank sorting contributed by Bill Licea-Kane, AMD (formerly ATI)
+  // Rank sorting originally contributed by Bill Licea-Kane, AMD (formerly ATI)
   vec4 i0;
 
   vec3 isX = step( x0.yzw, x0.xxx );
-  i0.x = dot( isX, vec3( 1.0 ) );
+  vec3 isYZ = step( x0.zww, x0.yyz );
+//  i0.x = dot( isX, vec3( 1.0 ) );
+  i0.x = isX.x + isX.y + isX.z;
   i0.yzw = 1.0 - isX;
 
-  vec3 isYZ = step( x0.zww, x0.yyz );
-  i0.y += dot( isYZ.xy, vec2( 1.0 ) );
+//  i0.y += dot( isYZ.xy, vec2( 1.0 ) );
+  i0.y += isYZ.x + isYZ.y;
   i0.zw += 1.0 - isYZ.xy;
 
   i0.z += isYZ.z;
@@ -51,7 +53,7 @@ float simplexNoise(vec4 v)
   vec4 i2 = clamp( i0-1.0, 0.0, 1.0 );
   vec4 i1 = clamp( i0-2.0, 0.0, 1.0 );
 #else
-// Force existance of strict total ordering in sort.
+// Force existence of strict total ordering in sort.
   vec4 q0 = floor(x0 * 1024.0) + vec4( 0.0, 1.0/4.0, 2.0/4.0 , 3.0/4.0);
   vec4 q1;
   q1.xy = max(q0.xy, q0.zw);   //  x:z  y:w
@@ -88,11 +90,17 @@ float simplexNoise(vec4 v)
            + i.y + vec4(i1.y, i2.y, i3.y, 1.0 ), pParam.xyz)
            + i.x + vec4(i1.x, i2.x, i3.x, 1.0 ), pParam.xyz);
 // Gradients
-// ( N*N*N points uniformly over a cube, mapped onto a 4-octohedron.)
-  vec4 ip = vec4(pParam.w) ;
-  ip.xy *= pParam.w ;
-  ip.x  *= pParam.w ;
-  ip = vec4(1.0,1.0,1.0,2.0) / ip ;
+// ( 7*7*6 points uniformly over a cube, mapped onto a 4-octahedron.)
+// The permutation ring is 17*17, and that should be close
+// to an even multiple of the number of points to avoid
+// directional preferences for the noise field.
+// 7*7*6 = 294, which is close to 17*17 = 289.
+
+    vec4 ip = vec4(1.0/294.0, 1.0/49.0, 1.0/7.0, 0.0) ;
+//  vec4 ip = vec4(pParam.w) ;
+//  ip.xy *= pParam.w ;
+//  ip.x  *= pParam.w ;
+//  ip = vec4(1.0, 1.0, 1.0, 2.0) / ip ;
 
   vec4 p0 = grad4(j0,   ip);
   vec4 p1 = grad4(j1.x, ip);
@@ -113,7 +121,7 @@ float simplexNoise(vec4 v)
   vec2 m1 = max(0.6 - vec2(dot(x3,x3), dot(x4,x4)            ), 0.0);
   m0 = m0 * m0;
   m1 = m1 * m1;
-  return 70.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))
+  return 49.0 * ( dot(m0*m0, vec3( dot( p0, x0 ), dot( p1, x1 ), dot( p2, x2 )))
                + dot(m1*m1, vec2( dot( p3, x3 ), dot( p4, x4 ) ) ) ) ;
 
   }

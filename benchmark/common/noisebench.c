@@ -352,14 +352,24 @@ int main(int argc, char *argv[]) {
     double performance = 0.0;
     int ndims = 2; // Currently running version of noise: 2D, 3D or 4D
     FILE *logfile;
+    GLFWvidmode vidmode;
 
     GLboolean running = GL_TRUE; // Main loop exits when this is set to GL_FALSE
     
     // Initialise GLFW
     glfwInit();
 
-    // Open the OpenGL window
-    if( !glfwOpenWindow(4096, 4096, 8,8,8,8, 32,0, GLFW_FULLSCREEN) )
+    // Open a temporary OpenGL window just to determine the desktop size
+    if( !glfwOpenWindow(256, 256, 8,8,8,8, 32,0, GLFW_WINDOW) )
+    {
+        glfwTerminate(); // glfwOpenWindow failed, quit the program.
+        return 1;
+    }
+    glfwGetDesktopMode(&vidmode);
+    glfwCloseWindow();
+
+    // Open a fullscreen window using the current desktop resolution
+    if( !glfwOpenWindow(vidmode.Width, vidmode.Height, 8,8,8,8, 32,0, GLFW_FULLSCREEN) )
     {
         glfwTerminate(); // glfwOpenWindow failed, quit the program.
         return 1;
@@ -372,9 +382,10 @@ int main(int argc, char *argv[]) {
     
     logfile = fopen(LOGFILENAME, "w");
 
-    fprintf(logfile, "GL vendor:   %s\n", glGetString(GL_VENDOR));
-    fprintf(logfile, "GL renderer: %s\n", glGetString(GL_RENDERER));
-    fprintf(logfile, "GL version:  %s\n", glGetString(GL_VERSION));
+    fprintf(logfile, "GL vendor:    %s\n", glGetString(GL_VENDOR));
+    fprintf(logfile, "GL renderer:  %s\n", glGetString(GL_RENDERER));
+    fprintf(logfile, "GL version:   %s\n", glGetString(GL_VERSION));
+    fprintf(logfile, "Desktop size: %d x %d pixels\n", vidmode.Width, vidmode.Height);
 
     // Create the shader object from two external GLSL source files
     createShader(&programObject, VERTEXSHADERFILE2D, FRAGMENTSHADERFILE2D);
