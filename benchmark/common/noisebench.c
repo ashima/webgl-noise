@@ -359,7 +359,12 @@ int main(int argc, char *argv[]) {
     glfwInit();
 
     // Open the OpenGL window
+#ifdef __APPLE__
+    // MacOS X clips oversized fullscreen windows, it doesn't resize them
+    if( !glfwOpenWindow(1280, 800, 8,8,8,8, 32,0, GLFW_FULLSCREEN) )
+#else
     if( !glfwOpenWindow(4096, 4096, 8,8,8,8, 32,0, GLFW_FULLSCREEN) )
+#endif
     {
         glfwTerminate(); // glfwOpenWindow failed, quit the program.
         return 1;
