@@ -14,5 +14,5 @@ void main( void )
 	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 	v_texCoord2D = gl_MultiTexCoord0.xy * 16.0 + vec2(0.0, time);
     v_texCoord3D = vec3(gl_MultiTexCoord0.xy * 16.0, time);
-    v_texCoord4D = vec4(gl_MultiTexCoord0.xy * 16.0, time, time);
+    v_texCoord4D = vec4(gl_MultiTexCoord0.xy * 16.0, 0.0, time);
 }
