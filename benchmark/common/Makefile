@@ -1,25 +1,40 @@
-OPTIONS=-DNORMALISE_GRADIENTS -DCOLLAPSE_SORTNET
+OPTIONS=
 SRCDIR=../../src
-COMMON=commonShader.frag $(SRCDIR)/noiseStdLib.glsl
-SHADERS=GLSL-ashimanoise2D.frag GLSL-ashimanoise3D.frag \
-	GLSL-ashimanoise4D.frag
+COMMON=commonShader.frag
+SHADERS=simplexnoise2D.frag simplexnoise3D.frag simplexnoise4D.frag \
+ classicnoise2D.frag classicnoise3D.frag classicnoise4D.frag
 
 all: $(SHADERS)
 
 clean:
 	 - rm $(SHADERS)
 
-GLSL-ashimanoise2D.frag: $(SRCDIR)/noise2D.glsl $(COMMON)
+simplexnoise2D.frag: $(SRCDIR)/noise2D.glsl $(COMMON)
 	cpp -P -I$(SRCDIR) -DSHADER=\"noise2D.glsl\" \
-		-DVTYPE=vec2 -DVNAME=v_texCoord2D\
+		-DVTYPE=vec2 -DVNAME=v_texCoord2D -DNOISEFUN=snoise\
 		$(OPTIONS) -DVERSION='#version 120' commonShader.frag $@
 
-GLSL-ashimanoise3D.frag: $(SRCDIR)/noise3D.glsl $(COMMON)
+simplexnoise3D.frag: $(SRCDIR)/noise3D.glsl $(COMMON)
 	cpp -P -I$(SRCDIR) -DSHADER=\"noise3D.glsl\" \
-		-DVTYPE=vec3 -DVNAME=v_texCoord3D\
+		-DVTYPE=vec3 -DVNAME=v_texCoord3D -DNOISEFUN=snoise\
 		$(OPTIONS) -DVERSION='#version 120' commonShader.frag $@
 
-GLSL-ashimanoise4D.frag: $(SRCDIR)/noise4D.glsl $(COMMON)
+simplexnoise4D.frag: $(SRCDIR)/noise4D.glsl $(COMMON)
 	cpp -P  -I$(SRCDIR) -DSHADER=\"noise4D.glsl\" \
-		-DVTYPE=vec4 -DVNAME=v_texCoord4D\
+		-DVTYPE=vec4 -DVNAME=v_texCoord4D -DNOISEFUN=snoise\
+		$(OPTIONS) -DVERSION='#version 120' commonShader.frag $@
+
+classicnoise2D.frag: $(SRCDIR)/classicnoise2D.glsl $(COMMON)
+	cpp -P -I$(SRCDIR) -DSHADER=\"classicnoise2D.glsl\" \
+		-DVTYPE=vec2 -DVNAME=v_texCoord2D -DNOISEFUN=cnoise\
+		$(OPTIONS) -DVERSION='#version 120' commonShader.frag $@
+
+classicnoise3D.frag: $(SRCDIR)/classicnoise3D.glsl $(COMMON)
+	cpp -P -I$(SRCDIR) -DSHADER=\"classicnoise3D.glsl\" \
+		-DVTYPE=vec3 -DVNAME=v_texCoord3D -DNOISEFUN=cnoise\
+		$(OPTIONS) -DVERSION='#version 120' commonShader.frag $@
+
+classicnoise4D.frag: $(SRCDIR)/classicnoise4D.glsl $(COMMON)
+	cpp -P  -I$(SRCDIR) -DSHADER=\"classicnoise4D.glsl\" \
+		-DVTYPE=vec4 -DVNAME=v_texCoord4D -DNOISEFUN=cnoise\
 		$(OPTIONS) -DVERSION='#version 120' commonShader.frag $@

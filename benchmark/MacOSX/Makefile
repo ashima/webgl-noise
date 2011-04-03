@@ -3,8 +3,9 @@ OUTPUTFILE=ashimanoise.log
 COMDIR=../common
 
 OBJS=noisebench.o
-SHADERS=GLSL-ashimanoise.vert GLSL-ashimanoise2D.frag \
-	GLSL-ashimanoise3D.frag GLSL-ashimanoise4D.frag
+SHADERS=noisebench.vert simplexnoise2D.frag simplexnoise3D.frag\
+	simplexnoise4D.frag classicnoise2D.frag classicnoise3D.frag\
+	classicnoise4D.frag constant.frag
 
 VPATH=$(COMDIR)
 CFLAGS=-I. -I/usr/X11/include
@@ -27,6 +28,5 @@ clean:
 	- rm $(EXECNAME) links_done $(OBJS) $(SHADERS) $(OUTPUTFILE)
 
 run:
-	open -W -a $(EXECNAME)
+	open -W ./$(EXECNAME).app
 	cat $(OUTPUTFILE)
-	

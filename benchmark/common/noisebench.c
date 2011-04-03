@@ -1,22 +1,26 @@
-
 /* 
- * Testbed for GLSL procedural noise functions.
+ * Benchmark for GLSL procedural noise functions.
  *
- * Shaders are loaded from two external files:
- * "GLSL-ashimanoise.vert" and "GLSL-ashimanoise.frag".
- * The program itself draws a spinning sphere
- * with a noise-generated fragment color.
+ * Shaders are loaded from external files, named in
+ * the macro definitions VERTSHADERFILE and FRAGSHADERFILE*.
+ * The main program draws a flat plane covering the
+ * viewport, activates each of six fragment shaders in turn
+ * and reports the fragment shading performance in Msamples/s
+ * for each.
  *
  * This program uses GLFW for convenience, to handle the OS-specific
  * window management stuff. Some Windows-specific stuff for extension
  * loading is still here, but that code is short-circuited on other
- * platforms - this file compiles unedited on Windows, Linux and MacOS X.
+ * platforms - this file compiles unedited on Windows, Linux and MacOS X,
+ * provided you have the relevant libraries and header files installed
+ * and set up your compilation to include the GLFW and OpenGL libraries.
  *
  * Author: Stefan Gustavson (stegu@itn.liu.se) 2004, 2005, 2010, 2011
+ * This code is in the public domain.
  */
 
 // Identify the exact version of noise being benchmarked
-#define NOISEVERSION "2011-03-25"
+#define NOISEVERSION "2011-04-03"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,21 +37,25 @@
 
 #ifdef __APPLE__
 // MacOS application bundles have the executable inside a directory structure
-#define VERTEXSHADERFILE2D "../../../GLSL-ashimanoise.vert"
-#define FRAGMENTSHADERFILE2D "../../../GLSL-ashimanoise2D.frag"
-#define VERTEXSHADERFILE3D "../../../GLSL-ashimanoise.vert"
-#define FRAGMENTSHADERFILE3D "../../../GLSL-ashimanoise3D.frag"
-#define VERTEXSHADERFILE4D "../../../GLSL-ashimanoise.vert"
-#define FRAGMENTSHADERFILE4D "../../../GLSL-ashimanoise4D.frag"
+#define VERTSHADERFILE "../../../noisebench.vert"
+#define FRAGSHADERFILE_S2D "../../../simplexnoise2D.frag"
+#define FRAGSHADERFILE_S3D "../../../simplexnoise3D.frag"
+#define FRAGSHADERFILE_S4D "../../../simplexnoise4D.frag"
+#define FRAGSHADERFILE_C2D "../../../classicnoise2D.frag"
+#define FRAGSHADERFILE_C3D "../../../classicnoise3D.frag"
+#define FRAGSHADERFILE_C4D "../../../classicnoise4D.frag"
+#define FRAGSHADERFILE_CONST "../../../constant.frag"
 #define LOGFILENAME "../../../ashimanoise.log"
 #else
 // Windows, Linux and other Unix systems expose executables as naked files
-#define VERTEXSHADERFILE2D "GLSL-ashimanoise.vert"
-#define FRAGMENTSHADERFILE2D "GLSL-ashimanoise2D.frag"
-#define VERTEXSHADERFILE3D "GLSL-ashimanoise.vert"
-#define FRAGMENTSHADERFILE3D "GLSL-ashimanoise3D.frag"
-#define VERTEXSHADERFILE4D "GLSL-ashimanoise.vert"
-#define FRAGMENTSHADERFILE4D "GLSL-ashimanoise4D.frag"
+#define VERTSHADERFILE "noisebench.vert"
+#define FRAGSHADERFILE_S2D "simplexnoise2D.frag"
+#define FRAGSHADERFILE_S3D "simplexnoise3D.frag"
+#define FRAGSHADERFILE_S4D "simplexnoise4D.frag"
+#define FRAGSHADERFILE_C2D "classicnoise2D.frag"
+#define FRAGSHADERFILE_C3D "classicnoise3D.frag"
+#define FRAGSHADERFILE_C4D "classicnoise4D.frag"
+#define FRAGSHADERFILE_CONST "constant.frag"
 #define LOGFILENAME "ashimanoise.log"
 #endif
 
@@ -350,7 +358,7 @@ int main(int argc, char *argv[]) {
     GLuint displayList;
     GLuint programObject;
     double performance = 0.0;
-    int ndims = 2; // Currently running version of noise: 2D, 3D or 4D
+    int activeshader = 0; // Currently active version of noise shader
     FILE *logfile;
     GLFWvidmode vidmode;
 
@@ -382,14 +390,11 @@ int main(int argc, char *argv[]) {
     
     logfile = fopen(LOGFILENAME, "w");
 
-    fprintf(logfile, "GL vendor:    %s\n", glGetString(GL_VENDOR));
-    fprintf(logfile, "GL renderer:  %s\n", glGetString(GL_RENDERER));
-    fprintf(logfile, "GL version:   %s\n", glGetString(GL_VERSION));
-    fprintf(logfile, "Desktop size: %d x %d pixels\n", vidmode.Width, vidmode.Height);
-
-    // Create the shader object from two external GLSL source files
-    createShader(&programObject, VERTEXSHADERFILE2D, FRAGMENTSHADERFILE2D);
-    fprintf(logfile, "\n2D simplex noise, version %s, ", NOISEVERSION);
+    fprintf(logfile, "GL vendor:     %s\n", glGetString(GL_VENDOR));
+    fprintf(logfile, "GL renderer:   %s\n", glGetString(GL_RENDERER));
+    fprintf(logfile, "GL version:    %s\n", glGetString(GL_VERSION));
+    fprintf(logfile, "Desktop size:  %d x %d pixels\n", vidmode.Width, vidmode.Height);
+	fprintf(logfile, "Noise version: %s\n\n", NOISEVERSION);
 
     // Disable Z buffering for this simple 2D shader benchmark
     glDisable(GL_DEPTH_TEST); // Use the Z buffer
@@ -402,6 +407,59 @@ int main(int argc, char *argv[]) {
     // Main loop
     while(running)
     {
+		double benchmarktime = 3.0; // Total time to run each shader
+        // Switch between the different versions of noise
+		if(activeshader == 0) {
+			createShader(&programObject, VERTSHADERFILE, FRAGSHADERFILE_CONST);
+			activeshader++;
+            fprintf(logfile, "Constant shading, ");
+		}
+        if((activeshader == 1) && (glfwGetTime() > benchmarktime * activeshader)) {
+            fprintf(logfile, "%.1f Msamples/s\n", performance);
+            createShader(&programObject, VERTSHADERFILE, FRAGSHADERFILE_S2D);
+			activeshader++;
+            fprintf(logfile, "2D simplex noise, ");
+        }
+        if((activeshader == 2) && (glfwGetTime() > benchmarktime * activeshader)) {
+            fprintf(logfile, "%.1f Msamples/s\n", performance);
+            createShader(&programObject, VERTSHADERFILE, FRAGSHADERFILE_S3D);
+			activeshader++;
+            fprintf(logfile, "3D simplex noise, ");
+        }
+        if((activeshader == 3) && (glfwGetTime() > benchmarktime * activeshader)) {
+            fprintf(logfile, "%.1f Msamples/s\n", performance);
+            createShader(&programObject, VERTSHADERFILE, FRAGSHADERFILE_S4D);
+			activeshader++;
+            fprintf(logfile, "4D simplex noise, ");
+        }
+        if((activeshader == 4) && (glfwGetTime() > benchmarktime * activeshader)) {
+            fprintf(logfile, "%.1f Msamples/s\n", performance);
+            createShader(&programObject, VERTSHADERFILE, FRAGSHADERFILE_C2D);
+			activeshader++;
+            fprintf(logfile, "2D classic noise, ");
+        }
+        if((activeshader == 5) && (glfwGetTime() > benchmarktime * activeshader)) {
+            fprintf(logfile, "%.1f Msamples/s\n", performance);
+            createShader(&programObject, VERTSHADERFILE, FRAGSHADERFILE_C3D);
+			activeshader++;
+            fprintf(logfile, "3D classic noise, ");
+        }
+        if((activeshader == 6) && (glfwGetTime() > benchmarktime * activeshader)) {
+            fprintf(logfile, "%.1f Msamples/s\n", performance);
+            createShader(&programObject, VERTSHADERFILE, FRAGSHADERFILE_C4D);
+			activeshader++;
+            fprintf(logfile, "4D classic noise, ");
+        }
+        if((activeshader == 7) && (glfwGetTime() > benchmarktime * activeshader)) {
+            fprintf(logfile, "%.1f Msamples/s\n", performance);
+            running = GL_FALSE;
+        }
+
+        // Exit prematurely if the ESC key is pressed or the window is closed.
+        if(glfwGetKey(GLFW_KEY_ESC) || !glfwGetWindowParam(GLFW_OPENED)) {
+          running = GL_FALSE;
+        }
+
         // Calculate and update the frames per second (FPS) display
         performance = computeFPS();
 
@@ -416,29 +474,6 @@ int main(int argc, char *argv[]) {
 
         // Swap buffers, i.e. display the image and prepare for next frame.
         glfwSwapBuffers();
-
-        // Switch between 2D, 3D and 4D versions of noise
-        if((glfwGetTime() > 5.0) && (ndims == 2)) {
-            fprintf(logfile, "%.1f Msamples/s\n", performance);
-            createShader(&programObject, VERTEXSHADERFILE3D, FRAGMENTSHADERFILE3D);
-            fprintf(logfile, "3D simplex noise, version %s, ", NOISEVERSION);
-            ndims = 3;
-        }
-        if((glfwGetTime() > 10.0) && (ndims == 3)) {
-            fprintf(logfile, "%.1f Msamples/s\n", performance);
-            createShader(&programObject, VERTEXSHADERFILE4D, FRAGMENTSHADERFILE4D);
-            fprintf(logfile, "4D simplex noise, version %s, ", NOISEVERSION);
-            ndims = 4;
-        }
-        if((glfwGetTime() > 15.0) && (ndims == 4)) {
-            fprintf(logfile, "%.1f Msamples/s\n", performance);
-            running = GL_FALSE;
-        }
-
-        // Exit prematurely if the ESC key is pressed or the window is closed.
-        if(glfwGetKey(GLFW_KEY_ESC) || !glfwGetWindowParam(GLFW_OPENED)) {
-          running = GL_FALSE;
-        }
     }
 
     // Close the OpenGL window and terminate GLFW.

@@ -3,7 +3,8 @@ MINGW32 = C:/Dev-Cpp
 #MINGW32 = C:/mingw
 CC = gcc.exe
 SRC = noisebench.c
-SHADERS = GLSL-ashimanoise.vert GLSL-ashimanoise2D.frag GLSL-ashimanoise3D.frag GLSL-ashimanoise4D.frag
+SHADERS = noisebench.vert constant.frag simplexnoise2D.frag simplexnoise3D.frag\
+ simplexnoise4D.frag classicnoise2D.frag classicnoise3D.frag classicnoise4D.frag
 OBJ = noisebench.o
 LINKOBJ = noisebench.o
 LIBS = -L$(MINGW32)/lib -mwindows -lglfw -lopengl32 -lglu32 -mconsole -g3
@@ -17,17 +18,29 @@ all: $(EXECNAME)
 clean:
 	del $(OBJ) $(EXECNAME) $(SHADERS) $(OUTPUTFILE) $(SRC)
 
-GLSL-ashimanoise.vert:
-	copy ..\common\GLSL-ashimanoise.vert .
+noisebench.vert:
+	copy ..\common\noisebench.vert .
 
-GLSL-ashimanoise2D.frag:
-	copy ..\common\GLSL-ashimanoise2D.frag .
+constant.frag:
+	copy ..\common\constant.frag .
 
-GLSL-ashimanoise3D.frag:
-	copy ..\common\GLSL-ashimanoise3D.frag .
+simplexnoise2D.frag:
+	copy ..\common\simplexnoise2D.frag .
 
-GLSL-ashimanoise4D.frag:
-	copy ..\common\GLSL-ashimanoise4D.frag .
+simplexnoise3D.frag:
+	copy ..\common\simplexnoise3D.frag .
+
+simplexnoise4D.frag:
+	copy ..\common\simplexnoise4D.frag .
+
+classicnoise2D.frag:
+	copy ..\common\classicnoise2D.frag .
+
+classicnoise3D.frag:
+	copy ..\common\classicnoise3D.frag .
+
+classicnoise4D.frag:
+	copy ..\common\classicnoise4D.frag .
 
 $(SRC):
 	copy ..\common\$(SRC) .

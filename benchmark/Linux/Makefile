@@ -1,5 +1,6 @@
-SHADERS=GLSL-ashimanoise.vert GLSL-ashimanoise2D.frag \
-	GLSL-ashimanoise3D.frag GLSL-ashimanoise4D.frag
+SHADERS=noisebench.vert simplexnoise2D.frag simplexnoise3D.frag\
+	simplexnoise4D.frag classicnoise2D.frag classicnoise3D.frag\
+	classicnoise4D.frag constant.frag
 COMDIR=../common
 VPATH=$(COMDIR)
 EXECNAME=noisebench
@@ -19,4 +20,3 @@ clean:
 run:
 	./$(EXECNAME)
 	cat $(OUTPUTFILE)
-

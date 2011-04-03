@@ -2,7 +2,7 @@
 // GLSL textureless classic 3D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
 // Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2011-04-01
+// Version: 2011-04-03
 //
 // Many thanks to Ian McEwan of Ashima Arts for the
 // ideas for permutation and gradient selection.
@@ -30,11 +30,8 @@
 // THE SOFTWARE.
 //
 
-#version 120
-
 vec4 permute(vec4 x)
 {
-  x = mod(x, 289.0);
   return floor(mod(((x*34.0)+1.0)*x, 289.0));
 }
 
@@ -50,18 +47,17 @@ vec2 fade(vec2 t) {
 // Classic Perlin noise
 float cnoise(vec2 P)
 {
-  vec2 Pi = floor(P); // Integer part for indexing
-  vec2 Pf = fract(P); // Fractional part for interpolation
-  vec4 ox = vec4(0.0, 1.0, 0.0, 1.0);
-  vec4 oy = vec4(0.0, 0.0, 1.0, 1.0);
-  vec4 ix = vec4(Pi.x) + ox;
-  vec4 iy = vec4(Pi.y) + oy;
-  vec4 fx = vec4(Pf.x) - ox;
-  vec4 fy = vec4(Pf.y) - oy;
+  vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
+  vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+  Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
+  vec4 ix = Pi.xzxz;
+  vec4 iy = Pi.yyww;
+  vec4 fx = Pf.xzxz;
+  vec4 fy = Pf.yyww;
 
   vec4 i = permute(permute(ix) + iy);
 
-  vec4 gx = 2.0 * fract(i / 43.0) - 1.0 ;
+  vec4 gx = 2.0 * fract(i / 41.0) - 1.0 ;
   vec4 gy = abs(gx) - 0.5 ;
   vec4 tx = floor(gx + 0.5);
   gx = gx - tx;
@@ -82,7 +78,7 @@ float cnoise(vec2 P)
   float n01 = dot(g01, vec2(fx.z, fy.z));
   float n11 = dot(g11, vec2(fx.w, fy.w));
 
-  vec2 fade_xy = fade(Pf);
+  vec2 fade_xy = fade(Pf.xy);
   vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
   float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
   return 2.3 * n_xy;
@@ -91,18 +87,18 @@ float cnoise(vec2 P)
 // Classic Perlin noise, periodic variant
 float pnoise(vec2 P, vec2 rep)
 {
-  vec2 Pi = floor(P); // Integer part for indexing
-  vec2 Pf = fract(P); // Fractional part for interpolation
-  vec4 ox = vec4(0.0, 1.0, 0.0, 1.0);
-  vec4 oy = vec4(0.0, 0.0, 1.0, 1.0);
-  vec4 ix = mod(vec4(Pi.x) + ox, rep.x); // Index modulo period. The only
-  vec4 iy = mod(vec4(Pi.y) + oy, rep.y); // difference from cnoise().
-  vec4 fx = vec4(Pf.x) - ox;
-  vec4 fy = vec4(Pf.y) - oy;
+  vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
+  vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
+  Pi = mod(Pi, rep.xyxy); // To create noise with explicit period
+  Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
+  vec4 ix = Pi.xzxz;
+  vec4 iy = Pi.yyww;
+  vec4 fx = Pf.xzxz;
+  vec4 fy = Pf.yyww;
 
   vec4 i = permute(permute(ix) + iy);
 
-  vec4 gx = 2.0 * fract(i / 43.0) - 1.0 ;
+  vec4 gx = 2.0 * fract(i / 41.0) - 1.0 ;
   vec4 gy = abs(gx) - 0.5 ;
   vec4 tx = floor(gx + 0.5);
   gx = gx - tx;
@@ -123,7 +119,7 @@ float pnoise(vec2 P, vec2 rep)
   float n01 = dot(g01, vec2(fx.z, fy.z));
   float n11 = dot(g11, vec2(fx.w, fy.w));
 
-  vec2 fade_xy = fade(Pf);
+  vec2 fade_xy = fade(Pf.xy);
   vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);
   float n_xy = mix(n_x.x, n_x.y, fade_xy.y);
   return 2.3 * n_xy;

@@ -1,14 +1,12 @@
-
 This work follows Stefan Gustavson's paper "Simplex noise demystified"
-http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
+http://www.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
 without using uniform arrays or texture engines.
 
-A single vec4 uniform 'pParam' is used to set the length and a and
-c constants respectively of the permutation polynomial to use. The
-last element of the vec4 is the number of gradients to select from
-on the vertices. An example vec4 is ( 19*19,  2*19,  1,  7 )
+The resulting noise functions are fast and self contained,
+and their performance scales well with massive parallelism.
 
-Refer to http://en.wikipedia.org/wiki/Permutation_polynomial for
-more information on permutation polynomials.
+Simplex noise functions are (C) Ashima Arts
+Classic noise functions are (C) Stefan Gustavson
 
-
+Source code for the noise functions is released under the
+conditions of the MIT license. See the file LICENSE for details.
