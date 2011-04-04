@@ -244,7 +244,6 @@ double computeFPS() {
         fps = (double)frames / (t-t0);
         sprintf(titlestring, "GLSL noise demo (%.1f FPS)", fps);
         glfwSetWindowTitle(titlestring);
-        printf("Speed: %.1f FPS\n", fps);
         t0 = t;
         frames = 0;
     }
