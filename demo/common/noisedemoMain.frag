@@ -28,7 +28,7 @@ void main( void )
   gl_FragColor = vec4(vec3(1.0, 0.5, 0.0) + vec3(n, n, n), 1.0);
 #else
   // A very plain monochrome noise
-  float n = snoise(v_texCoord3D * 8.0);
+  float n = snoise(v_texCoord3D * 6.0);
   gl_FragColor = vec4(0.5 + 0.5 * vec3(n, n, n), 1.0);
 #endif
 }
