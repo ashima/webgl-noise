@@ -32,8 +32,7 @@
 
 vec4 permute(vec4 x)
 {
-  x = mod(x, 289.0);
-  return floor(mod(((x*34.0)+1.0)*x, 289.0));
+  return mod(((x*34.0)+1.0)*x, 289.0);
 }
 
 vec4 taylorInvSqrt(vec4 r)
@@ -50,6 +49,8 @@ float cnoise(vec4 P)
 {
   vec4 Pi0 = floor(P); // Integer part for indexing
   vec4 Pi1 = Pi0 + 1.0; // Integer part + 1
+  Pi0 = mod(Pi0, 289.0);
+  Pi1 = mod(Pi1, 289.0);
   vec4 Pf0 = fract(P); // Fractional part for interpolation
   vec4 Pf1 = Pf0 - 1.0; // Fractional part - 1.0
   vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);

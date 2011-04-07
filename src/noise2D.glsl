@@ -2,16 +2,16 @@
 // Description : Array and textureless GLSL 2D simplex noise function.
 //      Author : Ian McEwan, Ashima Arts.
 //  Maintainer : ijm
-//     Lastmod : 20110403 (stegu)
+//     Lastmod : 20110407 (stegu)
 //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
 //               Distributed under the MIT License. See LICENSE file.
 //
 
 vec3 permute(vec3 x)
 {
-  return floor(mod(((x*34.0)+1.0)*x, 289.0));
+  return mod(((x*34.0)+1.0)*x, 289.0);
 }
-  
+
 vec3 taylorInvSqrt(vec3 r)
 {
   return 1.79284291400159 - 0.85373472095314 * r;
