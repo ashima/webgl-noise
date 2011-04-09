@@ -19,7 +19,7 @@ vec3 taylorInvSqrt(vec3 r)
 
 float snoise(vec2 v)
   {
-  const vec4 C = vec2(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
                       0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
 					 -0.577350269189626,  // -1.0 + 2.0 * C.x
 					  0.024390243902439); // 1.0 / 41.0
@@ -49,8 +49,8 @@ float snoise(vec2 v)
   m = m*m ;
 
 // ( N points uniformly over a line, mapped onto a diamond.)
-  vec3 x = 2.0 * fract(p * C.www) - 1.0 ;
-  vec3 h = abs(x) - 0.5 ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
   vec3 ox = floor(x + 0.5);
   vec3 a0 = x - ox;
 
@@ -60,6 +60,6 @@ float snoise(vec2 v)
 // Compute final noise value at P
   vec3 g;
   g.x  = a0.x  * x0.x  + h.x  * x0.y;
-  g.yz = a0.yz * xC.xz + h.yz * xC.yw;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
   return 130.0 * dot(m, g);
 }
