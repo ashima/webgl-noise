@@ -19,35 +19,37 @@ vec3 taylorInvSqrt(vec3 r)
 
 float snoise(vec2 v)
   {
-  const vec2 C = vec2(0.211324865405187134, // (3.0-sqrt(3.0))/6.0;
-                      0.366025403784438597); // 0.5*(sqrt(3.0)-1.0);
+  const vec4 C = vec2(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+					 -0.577350269189626,  // -1.0 + 2.0 * C.x
+					  0.024390243902439); // 1.0 / 41.0
 // First corner
   vec2 i  = floor(v + dot(v, C.yy) );
   vec2 x0 = v -   i + dot(i, C.xx);
 
 // Other corners
   vec2 i1;
-  i1.x = step( x0.y, x0.x ); // 1.0 if x0.x > x0.y, else 0.0
+  i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
   i1.y = 1.0 - i1.x;
 
   // x0 = x0 - 0.0 + 0.0 * C.xx ;
   // x1 = x0 - i1 + 1.0 * C.xx ;
   // x2 = x0 - 1.0 + 2.0 * C.xx ;
 
-  vec4 xC = x0.xyxy + vec4( C.xx, -1.0 + 2.0 * C.xx);
-  xC.xy -= i1;
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
 
 // Permutations
   i = mod(i, 289.0); // Avoid truncation effects in permutation
   vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
 		+ i.x + vec3(0.0, i1.x, 1.0 ));
 
-  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(xC.xy,xC.xy), dot(xC.zw,xC.zw)), 0.0);
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
   m = m*m ;
   m = m*m ;
 
 // ( N points uniformly over a line, mapped onto a diamond.)
-  vec3 x = 2.0 * fract(p / 41.0) - 1.0 ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0 ;
   vec3 h = abs(x) - 0.5 ;
   vec3 ox = floor(x + 0.5);
   vec3 a0 = x - ox;
