@@ -49,7 +49,7 @@ float snoise(vec3 v)
            + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
 
 // Gradients: 7x7 points over a square, mapped onto an octahedron.
-// The ring size 17*17 = 289 is close to a multiple of 47 (49*6 = 294)
+// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
   float n_ = 0.142857142857; // 1.0/7.0
   vec3  ns = n_ * D.wyz - D.xzx;
 
