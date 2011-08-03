@@ -2,7 +2,7 @@
 // GLSL textureless classic 2D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
 // Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2011-04-10
+// Version: 2011-08-03
 //
 // Many thanks to Ian McEwan of Ashima Arts for the
 // ideas for permutation and gradient selection.
@@ -38,7 +38,7 @@ float cnoise(vec2 P)
 
   vec4 i = permute(permute(ix) + iy);
 
-  vec4 gx = 2.0 * fract(i / 41.0) - 1.0 ;
+  vec4 gx = fract(i * (1.0 / 41.0)) * 2.0 - 1.0 ;
   vec4 gy = abs(gx) - 0.5 ;
   vec4 tx = floor(gx + 0.5);
   gx = gx - tx;
@@ -79,7 +79,7 @@ float pnoise(vec2 P, vec2 rep)
 
   vec4 i = permute(permute(ix) + iy);
 
-  vec4 gx = 2.0 * fract(i / 41.0) - 1.0 ;
+  vec4 gx = fract(i * (1.0 / 41.0)) * 2.0 - 1.0 ;
   vec4 gy = abs(gx) - 0.5 ;
   vec4 tx = floor(gx + 0.5);
   gx = gx - tx;

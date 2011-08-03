@@ -3,7 +3,7 @@
 //               noise functions.
 //      Author : Ian McEwan, Ashima Arts.
 //  Maintainer : ijm
-//     Lastmod : 20110410 (stegu)
+//     Lastmod : 20110803 (stegu)
 //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
 //               Distributed under the MIT License. See LICENSE file.
 //

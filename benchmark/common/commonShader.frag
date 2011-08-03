@@ -12,5 +12,5 @@ varying VTYPE VNAME ;
 void main( void )
 {
   float n = NOISEFUN(VNAME);
-  gl_FragColor = vec4(0.5 + 0.5 * vec3(n, n, n), 1.0);
+  gl_FragColor = vec4(vec3(n * 0.5 + 0.5), 1.0);
 }
