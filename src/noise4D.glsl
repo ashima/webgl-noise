@@ -3,19 +3,23 @@
 //               noise functions.
 //      Author : Ian McEwan, Ashima Arts.
 //  Maintainer : ijm
-//     Lastmod : 20110410 (stegu)
+//     Lastmod : 20110813 (stegu)
 //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
 //               Distributed under the MIT License. See LICENSE file.
 //
 
-vec4 permute(vec4 x)
-{
-  return mod(((x*34.0)+1.0)*x, 289.0);
+vec4 mod289(vec4 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0; }
+
+float mod289(float x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0; }
+
+vec4 permute(vec4 x) {
+     return mod289(((x*34.0)+1.0)*x);
 }
 
-float permute(float x)
-{
-  return floor(mod(((x*34.0)+1.0)*x, 289.0));
+float permute(float x) {
+     return mod289(((x*34.0)+1.0)*x);
 }
 
 vec4 taylorInvSqrt(vec4 r)
@@ -86,7 +90,7 @@ float snoise(vec4 v)
   vec4 x4 = x0 + C.wwww;
 
 // Permutations
-  i = mod(i, 289.0); 
+  i = mod289(i); 
   float j0 = permute( permute( permute( permute(i.w) + i.z) + i.y) + i.x);
   vec4 j1 = permute( permute( permute( permute (
              i.w + vec4(i1.w, i2.w, i3.w, 1.0 ))

@@ -2,14 +2,21 @@
 // Description : Array and textureless GLSL 2D simplex noise function.
 //      Author : Ian McEwan, Ashima Arts.
 //  Maintainer : ijm
-//     Lastmod : 20110410 (stegu)
+//     Lastmod : 20110813 (stegu)
 //     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
 //               Distributed under the MIT License. See LICENSE file.
 //
 
-vec3 permute(vec3 x)
-{
-  return mod(((x*34.0)+1.0)*x, 289.0);
+vec3 mod289(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec2 mod289(vec2 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec3 permute(vec3 x) {
+  return mod289(((x*34.0)+1.0)*x);
 }
 
 float snoise(vec2 v)
@@ -34,7 +41,7 @@ float snoise(vec2 v)
   x12.xy -= i1;
 
 // Permutations
-  i = mod(i, 289.0); // Avoid truncation effects in permutation
+  i = mod289(i); // Avoid truncation effects in permutation
   vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
 		+ i.x + vec3(0.0, i1.x, 1.0 ));
 
@@ -51,7 +58,7 @@ float snoise(vec2 v)
   vec3 a0 = x - ox;
 
 // Normalise gradients implicitly by scaling m
-// Inlined for speed: m *= taylorInvSqrt( a0*a0 + h*h );
+// Approximation of: m *= inversesqrt( a0*a0 + h*h );
   m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
 
 // Compute final noise value at P
