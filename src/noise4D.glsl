@@ -80,9 +80,9 @@ float snoise(vec4 v)
   vec4 i1 = clamp( i0-2.0, 0.0, 1.0 );
 
   //  x0 = x0 - 0.0 + 0.0 * C.xxxx
-  //  x1 = x0 - i1  + 0.0 * C.xxxx
-  //  x2 = x0 - i2  + 0.0 * C.xxxx
-  //  x3 = x0 - i3  + 0.0 * C.xxxx
+  //  x1 = x0 - i1  + 1.0 * C.xxxx
+  //  x2 = x0 - i2  + 2.0 * C.xxxx
+  //  x3 = x0 - i3  + 3.0 * C.xxxx
   //  x4 = x0 - 1.0 + 4.0 * C.xxxx
   vec4 x1 = x0 - i1 + C.xxxx;
   vec4 x2 = x0 - i2 + C.yyyy;

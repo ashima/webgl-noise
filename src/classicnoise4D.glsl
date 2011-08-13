@@ -2,7 +2,7 @@
 // GLSL textureless classic 4D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
 // Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2011-04-10
+// Version: 2011-08-03
 //
 // Many thanks to Ian McEwan of Ashima Arts for the
 // ideas for permutation and gradient selection.
@@ -49,9 +49,9 @@ float cnoise(vec4 P)
   vec4 ixy10 = permute(ixy1 + iw0);
   vec4 ixy11 = permute(ixy1 + iw1);
 
-  vec4 gx00 = ixy00 / 7.0;
-  vec4 gy00 = floor(gx00) / 7.0;
-  vec4 gz00 = floor(gy00) / 6.0;
+  vec4 gx00 = ixy00 * (1.0 / 7.0);
+  vec4 gy00 = floor(gx00) * (1.0 / 7.0);
+  vec4 gz00 = floor(gy00) * (1.0 / 6.0);
   gx00 = fract(gx00) - 0.5;
   gy00 = fract(gy00) - 0.5;
   gz00 = fract(gz00) - 0.5;
@@ -60,9 +60,9 @@ float cnoise(vec4 P)
   gx00 -= sw00 * (step(0.0, gx00) - 0.5);
   gy00 -= sw00 * (step(0.0, gy00) - 0.5);
 
-  vec4 gx01 = ixy01 / 7.0;
-  vec4 gy01 = floor(gx01) / 7.0;
-  vec4 gz01 = floor(gy01) / 6.0;
+  vec4 gx01 = ixy01 * (1.0 / 7.0);
+  vec4 gy01 = floor(gx01) * (1.0 / 7.0);
+  vec4 gz01 = floor(gy01) * (1.0 / 6.0);
   gx01 = fract(gx01) - 0.5;
   gy01 = fract(gy01) - 0.5;
   gz01 = fract(gz01) - 0.5;
@@ -71,9 +71,9 @@ float cnoise(vec4 P)
   gx01 -= sw01 * (step(0.0, gx01) - 0.5);
   gy01 -= sw01 * (step(0.0, gy01) - 0.5);
 
-  vec4 gx10 = ixy10 / 7.0;
-  vec4 gy10 = floor(gx10) / 7.0;
-  vec4 gz10 = floor(gy10) / 6.0;
+  vec4 gx10 = ixy10 * (1.0 / 7.0);
+  vec4 gy10 = floor(gx10) * (1.0 / 7.0);
+  vec4 gz10 = floor(gy10) * (1.0 / 6.0);
   gx10 = fract(gx10) - 0.5;
   gy10 = fract(gy10) - 0.5;
   gz10 = fract(gz10) - 0.5;
@@ -82,9 +82,9 @@ float cnoise(vec4 P)
   gx10 -= sw10 * (step(0.0, gx10) - 0.5);
   gy10 -= sw10 * (step(0.0, gy10) - 0.5);
 
-  vec4 gx11 = ixy11 / 7.0;
-  vec4 gy11 = floor(gx11) / 7.0;
-  vec4 gz11 = floor(gy11) / 6.0;
+  vec4 gx11 = ixy11 * (1.0 / 7.0);
+  vec4 gy11 = floor(gx11) * (1.0 / 7.0);
+  vec4 gz11 = floor(gy11) * (1.0 / 6.0);
   gx11 = fract(gx11) - 0.5;
   gy11 = fract(gy11) - 0.5;
   gz11 = fract(gz11) - 0.5;
@@ -182,9 +182,9 @@ float cnoise(vec4 P, vec4 rep)
   vec4 ixy10 = permute(ixy1 + iw0);
   vec4 ixy11 = permute(ixy1 + iw1);
 
-  vec4 gx00 = ixy00 / 7.0;
-  vec4 gy00 = floor(gx00) / 7.0;
-  vec4 gz00 = floor(gy00) / 6.0;
+  vec4 gx00 = ixy00 * (1.0 / 7.0);
+  vec4 gy00 = floor(gx00) * (1.0 / 7.0);
+  vec4 gz00 = floor(gy00) * (1.0 / 6.0);
   gx00 = fract(gx00) - 0.5;
   gy00 = fract(gy00) - 0.5;
   gz00 = fract(gz00) - 0.5;
@@ -193,9 +193,9 @@ float cnoise(vec4 P, vec4 rep)
   gx00 -= sw00 * (step(0.0, gx00) - 0.5);
   gy00 -= sw00 * (step(0.0, gy00) - 0.5);
 
-  vec4 gx01 = ixy01 / 7.0;
-  vec4 gy01 = floor(gx01) / 7.0;
-  vec4 gz01 = floor(gy01) / 6.0;
+  vec4 gx01 = ixy01 * (1.0 / 7.0);
+  vec4 gy01 = floor(gx01) * (1.0 / 7.0);
+  vec4 gz01 = floor(gy01) * (1.0 / 6.0);
   gx01 = fract(gx01) - 0.5;
   gy01 = fract(gy01) - 0.5;
   gz01 = fract(gz01) - 0.5;
@@ -204,9 +204,9 @@ float cnoise(vec4 P, vec4 rep)
   gx01 -= sw01 * (step(0.0, gx01) - 0.5);
   gy01 -= sw01 * (step(0.0, gy01) - 0.5);
 
-  vec4 gx10 = ixy10 / 7.0;
-  vec4 gy10 = floor(gx10) / 7.0;
-  vec4 gz10 = floor(gy10) / 6.0;
+  vec4 gx10 = ixy10 * (1.0 / 7.0);
+  vec4 gy10 = floor(gx10) * (1.0 / 7.0);
+  vec4 gz10 = floor(gy10) * (1.0 / 6.0);
   gx10 = fract(gx10) - 0.5;
   gy10 = fract(gy10) - 0.5;
   gz10 = fract(gz10) - 0.5;
@@ -215,9 +215,9 @@ float cnoise(vec4 P, vec4 rep)
   gx10 -= sw10 * (step(0.0, gx10) - 0.5);
   gy10 -= sw10 * (step(0.0, gy10) - 0.5);
 
-  vec4 gx11 = ixy11 / 7.0;
-  vec4 gy11 = floor(gx11) / 7.0;
-  vec4 gz11 = floor(gy11) / 6.0;
+  vec4 gx11 = ixy11 * (1.0 / 7.0);
+  vec4 gy11 = floor(gx11) * (1.0 / 7.0);
+  vec4 gz11 = floor(gy11) * (1.0 / 6.0);
   gx11 = fract(gx11) - 0.5;
   gy11 = fract(gy11) - 0.5;
   gz11 = fract(gz11) - 0.5;
