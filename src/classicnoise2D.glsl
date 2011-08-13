@@ -2,7 +2,7 @@
 // GLSL textureless classic 2D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
 // Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2011-08-03
+// Version: 2011-08-13
 //
 // Many thanks to Ian McEwan of Ashima Arts for the
 // ideas for permutation and gradient selection.
@@ -11,9 +11,14 @@
 // Distributed under the MIT license. See LICENSE file.
 //
 
+vec4 mod289(vec4 x)
+{
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
 vec4 permute(vec4 x)
 {
-  return mod(((x*34.0)+1.0)*x, 289.0);
+  return mod289(((x*34.0)+1.0)*x);
 }
 
 vec4 taylorInvSqrt(vec4 r)
@@ -30,7 +35,7 @@ float cnoise(vec2 P)
 {
   vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
   vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
-  Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
+  Pi = mod289(Pi); // To avoid truncation effects in permutation
   vec4 ix = Pi.xzxz;
   vec4 iy = Pi.yyww;
   vec4 fx = Pf.xzxz;
@@ -71,7 +76,7 @@ float pnoise(vec2 P, vec2 rep)
   vec4 Pi = floor(P.xyxy) + vec4(0.0, 0.0, 1.0, 1.0);
   vec4 Pf = fract(P.xyxy) - vec4(0.0, 0.0, 1.0, 1.0);
   Pi = mod(Pi, rep.xyxy); // To create noise with explicit period
-  Pi = mod(Pi, 289.0); // To avoid truncation effects in permutation
+  Pi = mod289(Pi);        // To avoid truncation effects in permutation
   vec4 ix = Pi.xzxz;
   vec4 iy = Pi.yyww;
   vec4 fx = Pf.xzxz;

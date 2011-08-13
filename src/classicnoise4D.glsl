@@ -2,7 +2,7 @@
 // GLSL textureless classic 4D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
 // Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2011-08-03
+// Version: 2011-08-13
 //
 // Many thanks to Ian McEwan of Ashima Arts for the
 // ideas for permutation and gradient selection.
@@ -11,9 +11,14 @@
 // Distributed under the MIT license. See LICENSE file.
 //
 
+vec4 mod289(vec4 x)
+{
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
 vec4 permute(vec4 x)
 {
-  return mod(((x*34.0)+1.0)*x, 289.0);
+  return mod289(((x*34.0)+1.0)*x);
 }
 
 vec4 taylorInvSqrt(vec4 r)
@@ -30,8 +35,8 @@ float cnoise(vec4 P)
 {
   vec4 Pi0 = floor(P); // Integer part for indexing
   vec4 Pi1 = Pi0 + 1.0; // Integer part + 1
-  Pi0 = mod(Pi0, 289.0);
-  Pi1 = mod(Pi1, 289.0);
+  Pi0 = mod289(Pi0);
+  Pi1 = mod289(Pi1);
   vec4 Pf0 = fract(P); // Fractional part for interpolation
   vec4 Pf1 = Pf0 - 1.0; // Fractional part - 1.0
   vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
@@ -161,10 +166,12 @@ float cnoise(vec4 P)
 }
 
 // Classic Perlin noise, periodic version
-float cnoise(vec4 P, vec4 rep)
+float pnoise(vec4 P, vec4 rep)
 {
   vec4 Pi0 = mod(floor(P), rep); // Integer part modulo rep
   vec4 Pi1 = mod(Pi0 + 1.0, rep); // Integer part + 1 mod rep
+  Pi0 = mod289(Pi0);
+  Pi1 = mod289(Pi1);
   vec4 Pf0 = fract(P); // Fractional part for interpolation
   vec4 Pf1 = Pf0 - 1.0; // Fractional part - 1.0
   vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
