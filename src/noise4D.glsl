@@ -45,6 +45,9 @@ vec4 grad4(float j, vec4 ip)
 
   return p;
   }
+						
+// (sqrt(5) - 1)/4 = F4, used once below
+#define F4 0.309016994374947451
 
 float snoise(vec4 v)
   {
@@ -52,9 +55,6 @@ float snoise(vec4 v)
                         0.276393202250021,  // 2 * G4
                         0.414589803375032,  // 3 * G4
                        -0.447213595499958); // -1 + 4 * G4
-						
-// (sqrt(5) - 1)/4 = F4, used once below
-#define F4 0.309016994374947451
 
 // First corner
   vec4 i  = floor(v + dot(v, vec4(F4)) );
