@@ -30,7 +30,7 @@
 // vec3 {p}s{r}dnoise(vec2 pos {, vec2 per} {, float rot})
 // "pos" is the input (x,y) coordinate
 // "per" is the x and y period, where per.x is a positive integer
-//    and per.y is a positive even integer)
+//    and per.y is a positive even integer
 // "rot" is the angle to rotate the gradients (any float value,
 //    where 0.0 is no rotation and 1.0 is one full turn)
 // The first component of the 3-element return vector is the noise value.
@@ -39,7 +39,7 @@
 // float {p}s{r}noise(vec2 pos {, vec2 per} {, float rot})
 // "pos" is the input (x,y) coordinate
 // "per" is the x and y period, where per.x is a positive integer
-//    and per.y is a positive even integer)
+//    and per.y is a positive even integer
 // "rot" is the angle to rotate the gradients (any float value,
 //    where 0.0 is no rotation and 1.0 is one full turn)
 // The return value is the noise value.
