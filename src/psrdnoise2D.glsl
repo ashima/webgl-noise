@@ -78,19 +78,18 @@ vec3 permute(vec3 x) {
 }
 
 // Hashed 2-D gradients with an extra rotation.
-#define K 0.0243902439 // 1/41
+// (The constant 0.0243902439 is 1/41)
 vec2 rgrad2(vec2 p, float rot) {
 #if 0
 // Map from a line to a diamond such that a shift maps to a rotation.
-  float u = permute(permute(p.x) + p.y) * K + rot; // Rotate by shift
+  float u = permute(permute(p.x) + p.y) * 0.0243902439 + rot; // Rotate by shift
   u = 4.0 * fract(u) - 2.0;
   // (This vector could be normalized, exactly or approximately.)
   return vec2(abs(u)-1.0, abs(abs(u+1.0)-2.0)-1.0);
 #else
-#define TWOPI 6.28318530718
 // For more isotropic gradients, sin/cos can be used instead.
-  float u = permute(permute(p.x) + p.y) * K + rot; // Rotate by shift
-  u = fract(u) * TWOPI;
+  float u = permute(permute(p.x) + p.y) * 0.0243902439 + rot; // Rotate by shift
+  u = fract(u) * 6.28318530718; // 2*pi
   return vec2(cos(u), sin(u));
 #endif
 }
