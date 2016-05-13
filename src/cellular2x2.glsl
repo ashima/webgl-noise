@@ -4,7 +4,7 @@
 // Copyright (c) Stefan Gustavson 2011-04-19. All rights reserved.
 // This code is released under the conditions of the MIT license.
 // See LICENSE file for details.
-// https://github.com/ashima/webgl-noise
+// https://github.com/stegu/webgl-noise
 
 // Modulo 289 without a division (only multiplications)
 vec2 mod289(vec2 x) {
