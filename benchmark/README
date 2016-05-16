@@ -1,0 +1,6 @@
+This is a benchmark for the noise functions, but it was written in 2011
+to be compatible with MacOS X, which was still stuck at OpenGL 2.1 at the time.
+The code hasn't aged well. In addition to using legacy OpenGL 2.1, it uses
+the old version 2 of the GLFW library, which is still available but no longer
+maintained. Trying to resurrect this code might prove painful.
+In any case, this is not code you should learn from or build upon.

@@ -53,7 +53,7 @@
 //
 // Copyright (c) 2016 Stefan Gustavson. All rights reserved.
 // Distributed under the MIT license. See LICENSE file.
-// https://github.com/ashima/webgl-noise
+// https://github.com/stegu/webgl-noise
 //
 
 //
