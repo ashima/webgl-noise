@@ -1,0 +1,10 @@
+These files contain noise functions that are compatible with all
+current versions of GLSL (1.20 and up), and all you need to use them
+is provided in the source file. There is no external data, and no
+setup procedure. Just cut and paste and call the function.
+
+GLSL has a very rudimentary linker, so some helper functions are
+included in several of the files with the same name. If you want to
+use more than one of these functions in the same shader, you may run
+into problems with redefinition of the functions mod289() and permute().
+If that happens, just delete any superfluous definitions.
