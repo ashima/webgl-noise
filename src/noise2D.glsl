@@ -21,8 +21,7 @@ vec3 permute(vec3 x) {
   return mod289(((x*34.0)+1.0)*x);
 }
 
-float snoise(vec2 v)
-  {
+float snoise(vec2 v) {
   const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
                       0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
                      -0.577350269189626,  // -1.0 + 2.0 * C.x
