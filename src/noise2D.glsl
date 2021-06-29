@@ -18,7 +18,7 @@ vec2 mod289(vec2 x) {
 }
 
 vec3 permute(vec3 x) {
-  return mod289(((x*34.0)+1.0)*x);
+  return mod289(((x*34.0)+6.0)*x);
 }
 
 float snoise(vec2 v)
