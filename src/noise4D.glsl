@@ -17,11 +17,11 @@ float mod289(float x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0; }
 
 vec4 permute(vec4 x) {
-     return mod289(((x*34.0)+1.0)*x);
+     return mod289(((x*34.0)+6.0)*x);
 }
 
 float permute(float x) {
-     return mod289(((x*34.0)+1.0)*x);
+     return mod289(((x*34.0)+6.0)*x);
 }
 
 vec4 taylorInvSqrt(vec4 r)
