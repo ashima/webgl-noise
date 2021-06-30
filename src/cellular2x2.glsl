@@ -22,7 +22,7 @@ vec4 mod7(vec4 x) {
 
 // Permutation polynomial: (34x^2 + 6x) mod 289
 vec4 permute(vec4 x) {
-  return mod289((34.0 * x + 6.0) * x);
+  return mod289((34.0 * x + 10.0) * x);
 }
 
 // Cellular noise, returning F1 and F2 in a vec2.
