@@ -24,7 +24,7 @@ vec4 mod289(vec4 x)
 
 vec4 permute(vec4 x)
 {
-  return mod289(((x*34.0)+6.0)*x);
+  return mod289(((x*34.0)+10.0)*x);
 }
 
 vec4 taylorInvSqrt(vec4 r)
