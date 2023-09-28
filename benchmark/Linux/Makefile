@@ -11,7 +11,9 @@ all: $(EXECNAME) links_done
 $(EXECNAME): noisebench.c
 	clang -I. -I/usr/X11/include $^ -lglfw -lGLU -lGL -o $@
 
-install: sudo apt install libglfw3 libglfw3-dev freeglut3-dev libglvnd-dev clang -y --no-install-recommends
+install:
+	sudo dpkg -i
+	sudo apt install  clang -y --no-install-recommends
 
 links_done: $(SHADERS)
 	ln -s $? . ; touch links_done
