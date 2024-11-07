@@ -2,7 +2,7 @@
 // GLSL textureless classic 3D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
 // Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2011-10-11
+// Version: 2024-11-07
 //
 // Many thanks to Ian McEwan of Ashima Arts for the
 // ideas for permutation and gradient selection.
@@ -80,24 +80,16 @@ float cnoise(vec3 P)
   vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
 
   vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
-  g000 *= norm0.x;
-  g010 *= norm0.y;
-  g100 *= norm0.z;
-  g110 *= norm0.w;
   vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
-  g001 *= norm1.x;
-  g011 *= norm1.y;
-  g101 *= norm1.z;
-  g111 *= norm1.w;
 
-  float n000 = dot(g000, Pf0);
-  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
-  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
-  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
-  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
-  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
-  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
-  float n111 = dot(g111, Pf1);
+  float n000 = norm0.x * dot(g000, Pf0);
+  float n010 = norm0.y * dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+  float n100 = norm0.z * dot(g100, vec3(Pf1.x, Pf0.yz));
+  float n110 = norm0.w * dot(g110, vec3(Pf1.xy, Pf0.z));
+  float n001 = norm1.x * dot(g001, vec3(Pf0.xy, Pf1.z));
+  float n011 = norm1.y * dot(g011, vec3(Pf0.x, Pf1.yz));
+  float n101 = norm1.z * dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+  float n111 = norm1.w * dot(g111, Pf1);
 
   vec3 fade_xyz = fade(Pf0);
   vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
@@ -150,24 +142,16 @@ float pnoise(vec3 P, vec3 rep)
   vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
 
   vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
-  g000 *= norm0.x;
-  g010 *= norm0.y;
-  g100 *= norm0.z;
-  g110 *= norm0.w;
   vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
-  g001 *= norm1.x;
-  g011 *= norm1.y;
-  g101 *= norm1.z;
-  g111 *= norm1.w;
 
-  float n000 = dot(g000, Pf0);
-  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
-  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
-  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
-  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
-  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
-  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
-  float n111 = dot(g111, Pf1);
+  float n000 = norm0.x * dot(g000, Pf0);
+  float n010 = norm0.y * dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+  float n100 = norm0.z * dot(g100, vec3(Pf1.x, Pf0.yz));
+  float n110 = norm0.w * dot(g110, vec3(Pf1.xy, Pf0.z));
+  float n001 = norm1.x * dot(g001, vec3(Pf0.xy, Pf1.z));
+  float n011 = norm1.y * dot(g011, vec3(Pf0.x, Pf1.yz));
+  float n101 = norm1.z * dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+  float n111 = norm1.w * dot(g111, Pf1);
 
   vec3 fade_xyz = fade(Pf0);
   vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
