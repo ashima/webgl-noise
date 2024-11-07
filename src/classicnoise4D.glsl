@@ -117,45 +117,26 @@ float cnoise(vec4 P)
   vec4 g1111 = vec4(gx11.w,gy11.w,gz11.w,gw11.w);
 
   vec4 norm00 = taylorInvSqrt(vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
-  g0000 *= norm00.x;
-  g0100 *= norm00.y;
-  g1000 *= norm00.z;
-  g1100 *= norm00.w;
-
   vec4 norm01 = taylorInvSqrt(vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
-  g0001 *= norm01.x;
-  g0101 *= norm01.y;
-  g1001 *= norm01.z;
-  g1101 *= norm01.w;
-
   vec4 norm10 = taylorInvSqrt(vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
-  g0010 *= norm10.x;
-  g0110 *= norm10.y;
-  g1010 *= norm10.z;
-  g1110 *= norm10.w;
-
   vec4 norm11 = taylorInvSqrt(vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
-  g0011 *= norm11.x;
-  g0111 *= norm11.y;
-  g1011 *= norm11.z;
-  g1111 *= norm11.w;
 
-  float n0000 = dot(g0000, Pf0);
-  float n1000 = dot(g1000, vec4(Pf1.x, Pf0.yzw));
-  float n0100 = dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
-  float n1100 = dot(g1100, vec4(Pf1.xy, Pf0.zw));
-  float n0010 = dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
-  float n1010 = dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
-  float n0110 = dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
-  float n1110 = dot(g1110, vec4(Pf1.xyz, Pf0.w));
-  float n0001 = dot(g0001, vec4(Pf0.xyz, Pf1.w));
-  float n1001 = dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
-  float n0101 = dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
-  float n1101 = dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
-  float n0011 = dot(g0011, vec4(Pf0.xy, Pf1.zw));
-  float n1011 = dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
-  float n0111 = dot(g0111, vec4(Pf0.x, Pf1.yzw));
-  float n1111 = dot(g1111, Pf1);
+  float n0000 = norm00.x * dot(g0000, Pf0);
+  float n0100 = norm00.y * dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
+  float n1000 = norm00.z * dot(g1000, vec4(Pf1.x, Pf0.yzw));
+  float n1100 = norm00.w * dot(g1100, vec4(Pf1.xy, Pf0.zw));
+  float n0010 = norm10.x * dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
+  float n0110 = norm10.y * dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
+  float n1010 = norm10.z * dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
+  float n1110 = norm10.w * dot(g1110, vec4(Pf1.xyz, Pf0.w));
+  float n0001 = norm01.x * dot(g0001, vec4(Pf0.xyz, Pf1.w));
+  float n0101 = norm01.y * dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
+  float n1001 = norm01.z * dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
+  float n1101 = norm01.w * dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
+  float n0011 = norm11.x * dot(g0011, vec4(Pf0.xy, Pf1.zw));
+  float n0111 = norm11.y * dot(g0111, vec4(Pf0.x, Pf1.yzw));
+  float n1011 = norm11.z * dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
+  float n1111 = norm11.w * dot(g1111, Pf1);
 
   vec4 fade_xyzw = fade(Pf0);
   vec4 n_0w = mix(vec4(n0000, n1000, n0100, n1100), vec4(n0001, n1001, n0101, n1101), fade_xyzw.w);
@@ -252,45 +233,26 @@ float pnoise(vec4 P, vec4 rep)
   vec4 g1111 = vec4(gx11.w,gy11.w,gz11.w,gw11.w);
 
   vec4 norm00 = taylorInvSqrt(vec4(dot(g0000, g0000), dot(g0100, g0100), dot(g1000, g1000), dot(g1100, g1100)));
-  g0000 *= norm00.x;
-  g0100 *= norm00.y;
-  g1000 *= norm00.z;
-  g1100 *= norm00.w;
-
   vec4 norm01 = taylorInvSqrt(vec4(dot(g0001, g0001), dot(g0101, g0101), dot(g1001, g1001), dot(g1101, g1101)));
-  g0001 *= norm01.x;
-  g0101 *= norm01.y;
-  g1001 *= norm01.z;
-  g1101 *= norm01.w;
-
   vec4 norm10 = taylorInvSqrt(vec4(dot(g0010, g0010), dot(g0110, g0110), dot(g1010, g1010), dot(g1110, g1110)));
-  g0010 *= norm10.x;
-  g0110 *= norm10.y;
-  g1010 *= norm10.z;
-  g1110 *= norm10.w;
-
   vec4 norm11 = taylorInvSqrt(vec4(dot(g0011, g0011), dot(g0111, g0111), dot(g1011, g1011), dot(g1111, g1111)));
-  g0011 *= norm11.x;
-  g0111 *= norm11.y;
-  g1011 *= norm11.z;
-  g1111 *= norm11.w;
 
-  float n0000 = dot(g0000, Pf0);
-  float n1000 = dot(g1000, vec4(Pf1.x, Pf0.yzw));
-  float n0100 = dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
-  float n1100 = dot(g1100, vec4(Pf1.xy, Pf0.zw));
-  float n0010 = dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
-  float n1010 = dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
-  float n0110 = dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
-  float n1110 = dot(g1110, vec4(Pf1.xyz, Pf0.w));
-  float n0001 = dot(g0001, vec4(Pf0.xyz, Pf1.w));
-  float n1001 = dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
-  float n0101 = dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
-  float n1101 = dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
-  float n0011 = dot(g0011, vec4(Pf0.xy, Pf1.zw));
-  float n1011 = dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
-  float n0111 = dot(g0111, vec4(Pf0.x, Pf1.yzw));
-  float n1111 = dot(g1111, Pf1);
+  float n0000 = norm00.x * dot(g0000, Pf0);
+  float n0100 = norm00.y * dot(g0100, vec4(Pf0.x, Pf1.y, Pf0.zw));
+  float n1000 = norm00.z * dot(g1000, vec4(Pf1.x, Pf0.yzw));
+  float n1100 = norm00.w * dot(g1100, vec4(Pf1.xy, Pf0.zw));
+  float n0010 = norm10.x * dot(g0010, vec4(Pf0.xy, Pf1.z, Pf0.w));
+  float n0110 = norm10.y * dot(g0110, vec4(Pf0.x, Pf1.yz, Pf0.w));
+  float n1010 = norm10.z * dot(g1010, vec4(Pf1.x, Pf0.y, Pf1.z, Pf0.w));
+  float n1110 = norm10.w * dot(g1110, vec4(Pf1.xyz, Pf0.w));
+  float n0001 = norm01.x * dot(g0001, vec4(Pf0.xyz, Pf1.w));
+  float n0101 = norm01.y * dot(g0101, vec4(Pf0.x, Pf1.y, Pf0.z, Pf1.w));
+  float n1001 = norm01.z * dot(g1001, vec4(Pf1.x, Pf0.yz, Pf1.w));
+  float n1101 = norm01.w * dot(g1101, vec4(Pf1.xy, Pf0.z, Pf1.w));
+  float n0011 = norm11.x * dot(g0011, vec4(Pf0.xy, Pf1.zw));
+  float n0111 = norm11.y * dot(g0111, vec4(Pf0.x, Pf1.yzw));
+  float n1011 = norm11.z * dot(g1011, vec4(Pf1.x, Pf0.y, Pf1.zw));
+  float n1111 = norm11.w * dot(g1111, Pf1);
 
   vec4 fade_xyzw = fade(Pf0);
   vec4 n_0w = mix(vec4(n0000, n1000, n0100, n1100), vec4(n0001, n1001, n0101, n1101), fade_xyzw.w);
