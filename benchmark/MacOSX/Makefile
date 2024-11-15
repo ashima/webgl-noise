@@ -9,7 +9,7 @@ SHADERS=noisebench.vert simplexnoise2D.frag simplexnoise3D.frag\
 
 VPATH=$(COMDIR)
 CFLAGS=-I. -I/usr/X11/include
-LDFLAGS=-framework Cocoa -framework OpenGL -lglfw
+LDFLAGS=-framework Cocoa -framework OpenGL -lglut -lGLEW
 
 .PHONY: all clean run
 
