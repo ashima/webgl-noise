@@ -7,7 +7,7 @@ SHADERS = noisebench.vert constant.frag simplexnoise2D.frag simplexnoise3D.frag\
  simplexnoise4D.frag classicnoise2D.frag classicnoise3D.frag classicnoise4D.frag
 OBJ = noisebench.o
 LINKOBJ = noisebench.o
-LIBS = -L$(MINGW32)/lib -mwindows -lglfw -lopengl32 -lglu32 -mconsole -g3
+LIBS = -L$(MINGW32)/lib -mwindows -lglut -lGLEW -lopengl32 -lglu32 -mconsole -g3
 INCS = -I. -I$(MINGW32)/include
 CFLAGS = $(INCS) -Wall -O3 -ffast-math -g3
 EXECNAME = noisebench.exe

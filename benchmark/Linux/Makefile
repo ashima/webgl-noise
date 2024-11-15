@@ -9,7 +9,7 @@ OUTPUTFILE=ashimanoise.log
 all: $(EXECNAME) links_done
 
 $(EXECNAME): noisebench.c
-	gcc -I. -I/usr/X11/include $^ -lglfw -lGLU -lGL -o $@
+	gcc -I. -I/usr/X11/include $^ -lglut -lGLEW -lGLU -lGL -o $@
 
 links_done: $(SHADERS)
 	ln -s $? . ; touch links_done
