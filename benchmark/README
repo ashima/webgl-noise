@@ -4,3 +4,9 @@ The code hasn't aged well. In addition to using legacy OpenGL 2.1, it uses
 the old version 2 of the GLFW library, which is still available but no longer
 maintained. Trying to resurrect this code might prove painful.
 In any case, this is not code you should learn from or build upon.
+
+# Edit
+
+I (Ayoub Lakrad) edited the code and posted it to FreeGLUT
+3.6.0 and GLEW 2.2.0, But it still uses GLSL 1.2
+to keep compatibility.
